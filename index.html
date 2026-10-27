@@ -44,7 +44,7 @@
       align-items: center;
       gap: 25px;
       padding: 20px;
-      max-width: 400px;
+      max-width: 380px;
       width: 90%;
     }
 
@@ -90,31 +90,111 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card SoundCloud Player */
+    /* Card Player Audio (Fără Video) */
     .player-card {
       width: 100%;
       background: rgba(12, 12, 12, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 15px;
+      padding: 24px;
       backdrop-filter: blur(16px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 18px;
     }
 
-    .soundcloud-wrapper {
+    .track-info {
+      text-align: center;
       width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
     }
 
-    .soundcloud-wrapper iframe {
+    .track-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .track-artist {
+      font-size: 0.85rem;
+      color: #aaaaaa;
+      font-weight: 500;
+    }
+
+    /* Controale */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      height: 166px;
+    }
+
+    .play-btn {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #000000;
       border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.3rem;
+      transition: all 0.2s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Bară de progres */
+    .progress-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #a0a0a0;
+      font-family: monospace;
+    }
+
+    .seek-slider {
+      width: 100%;
+      height: 5px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .seek-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0,0,0,0.8);
+    }
+
+    /* Ascundem complet iframe-ul YouTube pe ecran, dar păstrăm sunetul activ */
+    #hidden-yt-container {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -122,6 +202,11 @@
 
   <!-- Fundalul alb-negru cu stele și planete -->
   <canvas id="space-canvas"></canvas>
+
+  <!-- Playerul YouTube ascuns (redă doar audio în fundal) -->
+  <div id="hidden-yt-container">
+    <div id="player"></div>
+  </div>
 
   <div class="main-container">
     
@@ -141,15 +226,27 @@
       </div>
     </div>
 
-    <!-- Music Player SoundCloud -->
+    <!-- Card Player Audio Curat (Fără Video Vizibil) -->
     <div class="player-card">
-      <div class="soundcloud-wrapper">
-        <iframe 
-          scrolling="no" 
-          frameborder="no" 
-          allow="autoplay" 
-          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2060144932&color=%23ffffff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
-        </iframe>
+      <div class="track-info">
+        <div class="track-title">$brotherz$</div>
+        <div class="track-artist">RAVA</div>
+      </div>
+
+      <!-- Buton Start / Stop -->
+      <div class="controls">
+        <button class="play-btn" id="play-btn">
+          <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
+        </button>
+      </div>
+
+      <!-- Bara de derulare și minutajul -->
+      <div class="progress-container">
+        <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
+        <div class="time-display">
+          <span id="current-time">0:00</span>
+          <span id="duration">3:54</span>
+        </div>
       </div>
     </div>
 
@@ -223,6 +320,105 @@
       requestAnimationFrame(drawSpace);
     }
     drawSpace();
+  </script>
+
+  <!-- YouTube IFrame API (Rulează audio în fundal fără video vizibil) -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+    let isPlaying = false;
+    let updateTimer;
+
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const seekSlider = document.getElementById('seek-slider');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: 'htCnJYPEu8Q',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1,
+          'enablejsapi': 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      player.setVolume(100);
+      updateDuration();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        playIcon.className = 'fas fa-pause';
+        playIcon.style.marginLeft = '0px';
+        startTimer();
+      } else {
+        isPlaying = false;
+        playIcon.className = 'fas fa-play';
+        playIcon.style.marginLeft = '3px';
+        stopTimer();
+      }
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (!player || typeof player.getPlayerState !== 'function') return;
+      
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
+
+    seekSlider.addEventListener('input', () => {
+      if (!player || !player.getDuration) return;
+      const duration = player.getDuration();
+      const seekTo = (seekSlider.value / 100) * duration;
+      player.seekTo(seekTo, true);
+    });
+
+    function startTimer() {
+      stopTimer();
+      updateTimer = setInterval(updateProgress, 500);
+    }
+
+    function stopTimer() {
+      clearInterval(updateTimer);
+    }
+
+    function updateProgress() {
+      if (!player || !player.getCurrentTime) return;
+      const current = player.getCurrentTime();
+      const duration = player.getDuration();
+
+      if (duration > 0) {
+        seekSlider.value = (current / duration) * 100;
+        currentTimeEl.textContent = formatTime(current);
+        durationEl.textContent = formatTime(duration);
+      }
+    }
+
+    function updateDuration() {
+      if (player && player.getDuration) {
+        durationEl.textContent = formatTime(player.getDuration());
+      }
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
   </script>
 </body>
 </html>
