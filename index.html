@@ -1,421 +1,359 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@snuxjx0</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #030305;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@snuxjx0</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
 
-        /* Canvas background for animated stars */
-        #space-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+    body {
+      min-height: 100vh;
+      background: #050508;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-        /* Floating planet animations */
-        .floating-planet {
-            animation: float 14s ease-in-out infinite;
-        }
-        .floating-planet-2 {
-            animation: floatSlow 20s ease-in-out infinite;
-        }
+    /* Background cu efect spațial */
+    .stars-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      z-index: 1;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-18px) rotate(6deg); }
-        }
+    /* Containerul principal pe mijlocul ecranului */
+    .main-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      padding: 20px;
+    }
 
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(22px) rotate(-10deg); }
-        }
+    /* Secțiunea de profil cu numele și butoanele sociale */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
 
-        /* Glassmorphism Card Style */
-        .glass-card {
-            background: rgba(18, 18, 24, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        }
+    .username {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    }
 
-        /* Custom range slider thumb styling */
-        input[type=range] {
-            -webkit-appearance: none;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            background: #ffffff;
-            cursor: pointer;
-            margin-top: -4px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-            transition: transform 0.1s ease;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            cursor: pointer;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 2px;
-        }
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
 
-        .social-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .social-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
-        }
+    .social-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
 
-        /* Completely hide the YouTube iframe so only custom controls are visible */
-        #youtube-player-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            top: -9999px;
-            left: -9999px;
-            opacity: 0;
-            pointer-events: none;
-            visibility: hidden;
-        }
-    </style>
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Cardul player-ului audio */
+    .player-card {
+      width: 320px;
+      background: rgba(18, 18, 24, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .track-info {
+      text-align: center;
+      width: 100%;
+    }
+
+    .track-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      font-size: 0.85rem;
+      color: #a0a0a0;
+      font-weight: 500;
+    }
+
+    /* Controalele audio */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .play-btn {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.3rem;
+      transition: all 0.2s ease;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Bara de progres și minutarul */
+    .progress-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #808080;
+      font-family: monospace;
+    }
+
+    .seek-slider {
+      width: 100%;
+      height: 5px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 5px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .seek-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+
+    /* Pozitioneaza YouTube IFrame-ul in afara ecranului fara sa-l dezactiveze */
+    #yt-player-hidden {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 relative select-none">
+<body>
 
-    <!-- Hidden YouTube iframe container (Audio player only) -->
-    <div id="youtube-player-hidden"></div>
+  <div class="stars-bg"></div>
 
-    <!-- Interactive Space Canvas -->
-    <canvas id="space-canvas"></canvas>
+  <!-- Player-ul YouTube ascuns -->
+  <div id="yt-player-hidden">
+    <div id="player"></div>
+  </div>
 
-    <!-- Floating Decorative Planets -->
-    <div class="fixed top-12 right-8 md:right-28 z-0 floating-planet opacity-60 pointer-events-none">
-        <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="28" fill="url(#planet-grad1)"/>
-            <ellipse cx="50" cy="50" rx="46" ry="9" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" transform="rotate(-22 50 50)"/>
-            <defs>
-                <radialGradient id="planet-grad1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(40 40) rotate(45) scale(40)">
-                    <stop stop-color="#a0a0b5"/>
-                    <stop offset="1" stop-color="#0a0a0f"/>
-                </radialGradient>
-            </defs>
-        </svg>
+  <div class="main-container">
+    
+    <!-- Header cu profil și rețele sociale -->
+    <div class="profile-section">
+      <h1 class="username">@snuxjx0</h1>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@snuxjx0" target="_blank" class="social-btn" title="TikTok">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://steamcommunity.com/profiles/76561199860743512/" target="_blank" class="social-btn" title="Steam">
+          <i class="fab fa-steam"></i>
+        </a>
+        <a href="https://www.youtube.com/@snuxjx0" target="_blank" class="social-btn" title="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="fixed bottom-16 left-8 md:left-28 z-0 floating-planet-2 opacity-50 pointer-events-none">
-        <svg width="55" height="55" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="30" fill="url(#planet-grad2)"/>
-            <defs>
-                <radialGradient id="planet-grad2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(35 35) rotate(45) scale(35)">
-                    <stop stop-color="#ffffff"/>
-                    <stop offset="1" stop-color="#151520"/>
-                </radialGradient>
-            </defs>
-        </svg>
+    <!-- Cardul cu controale pentru muzică -->
+    <div class="player-card">
+      <div class="track-info">
+        <div class="track-title">$brotherz$</div>
+        <div class="track-artist">RAVA</div>
+      </div>
+
+      <div class="controls">
+        <button class="play-btn" id="play-btn">
+          <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
+        </button>
+      </div>
+
+      <div class="progress-container">
+        <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
+        <div class="time-display">
+          <span id="current-time">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Main Center Content -->
-    <main class="z-10 w-full max-w-sm flex flex-col items-center my-auto">
+  </div>
 
-        <!-- Header Profile -->
-        <header class="flex flex-col items-center mb-6 text-center">
-            <!-- Avatar -->
-            <div class="w-20 h-20 mb-3 rounded-full glass-card flex items-center justify-center p-1 border border-white/20 shadow-2xl">
-                <div class="w-full h-full rounded-full bg-gradient-to-tr from-zinc-800 via-zinc-900 to-black flex items-center justify-center border border-white/10">
-                    <i class="fa-brands fa-steam text-3xl text-white"></i>
-                </div>
-            </div>
-            
-            <!-- Handle -->
-            <h1 class="text-2xl font-black tracking-wide text-white drop-shadow-lg">
-                @snuxjx0
-            </h1>
+  <!-- Script YouTube API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player;
+    let isPlaying = false;
+    let updateTimer;
 
-            <!-- Social Links -->
-            <nav class="flex items-center gap-3 mt-4" aria-label="Social Links">
-                <!-- TikTok Button -->
-                <a href="https://www.tiktok.com/@snuxjx0" target="_blank" rel="noopener noreferrer" 
-                   title="TikTok"
-                   class="social-btn w-10 h-10 rounded-xl glass-card flex items-center justify-center text-zinc-300 hover:text-white">
-                    <i class="fa-brands fa-tiktok text-base"></i>
-                </a>
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const seekSlider = document.getElementById('seek-slider');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationEl = document.getElementById('duration');
 
-                <!-- Steam Button -->
-                <a href="https://steamcommunity.com/profiles/76561199860743512/" target="_blank" rel="noopener noreferrer" 
-                   title="Steam"
-                   class="social-btn w-10 h-10 rounded-xl glass-card flex items-center justify-center text-zinc-300 hover:text-white">
-                    <i class="fa-brands fa-steam text-base"></i>
-                </a>
-
-                <!-- YouTube Button -->
-                <a href="https://www.youtube.com/@snuxjx0" target="_blank" rel="noopener noreferrer" 
-                   title="YouTube"
-                   class="social-btn w-10 h-10 rounded-xl glass-card flex items-center justify-center text-zinc-300 hover:text-white">
-                    <i class="fa-brands fa-youtube text-base"></i>
-                </a>
-            </nav>
-        </header>
-
-        <!-- Pure Audio Music Player Card -->
-        <section class="w-full glass-card rounded-2xl p-5 border border-white/10 shadow-2xl space-y-4">
-            
-            <!-- Track Info -->
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                <div class="space-y-0.5">
-                    <div class="flex items-center gap-2">
-                        <span class="text-[9px] uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-zinc-300 font-bold">Audio</span>
-                        <span id="player-status-badge" class="text-[9px] uppercase tracking-widest text-zinc-500 font-semibold">Gata de redare</span>
-                    </div>
-                    <h2 class="text-base font-bold text-white leading-tight" id="song-title">RAVA - $brotherz$</h2>
-                    <p class="text-xs text-zinc-400" id="artist-name">RAVA</p>
-                </div>
-                <div class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-zinc-400">
-                    <i class="fa-solid fa-music text-sm" id="music-disc-icon"></i>
-                </div>
-            </div>
-
-            <!-- Custom Seek Bar & Timers -->
-            <div class="space-y-1.5">
-                <div class="relative flex items-center">
-                    <input type="range" id="seek-bar" min="0" max="100" value="0" step="0.1" 
-                           class="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer">
-                </div>
-                <div class="flex justify-between text-[11px] font-mono text-zinc-400">
-                    <span id="current-time">00:00</span>
-                    <span id="duration-time">00:00</span>
-                </div>
-            </div>
-
-            <!-- Player Controls (Start/Stop + Volume) -->
-            <div class="flex items-center justify-between pt-1">
-                <!-- Volume Control -->
-                <div class="flex items-center gap-2">
-                    <button id="mute-btn" class="text-zinc-400 hover:text-white transition w-5">
-                        <i class="fa-solid fa-volume-high text-xs" id="volume-icon"></i>
-                    </button>
-                    <input type="range" id="volume-bar" min="0" max="100" value="80" 
-                           class="w-16 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer">
-                </div>
-
-                <!-- Main Play / Pause (Start / Stop) Button -->
-                <button id="play-pause-btn" 
-                        class="w-12 h-12 rounded-full bg-white text-black hover:bg-zinc-200 transition flex items-center justify-center shadow-lg transform active:scale-95">
-                    <i class="fa-solid fa-play text-base translate-x-0.5" id="play-icon"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="mt-8 text-center text-[10px] tracking-widest text-zinc-500 uppercase font-medium">
-            WELCOME TO MY SPACE
-        </footer>
-    </main>
-
-    <!-- YouTube IFrame Player API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
-
-    <script>
-        // 1. Animated Stars Background Canvas
-        const canvas = document.getElementById('space-canvas');
-        const ctx = canvas.getContext('2d');
-
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initStars();
-        });
-
-        let stars = [];
-        function initStars() {
-            stars = [];
-            for (let i = 0; i < 180; i++) {
-                stars.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 1.4,
-                    alpha: Math.random(),
-                    speed: Math.random() * 0.01 + 0.003
-                });
-            }
+    // Se apelează automat când API-ul YouTube s-a încărcat
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '200',
+        width: '200',
+        videoId: 'htCnJYPEu8Q',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 0,
+          'disablekb': 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
         }
+      });
+    }
 
-        function drawStars() {
-            ctx.clearRect(0, 0, width, height);
-            stars.forEach(star => {
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-                ctx.fill();
+    function onPlayerReady(event) {
+      player.setVolume(100);
+      updateDuration();
+    }
 
-                star.alpha += star.speed;
-                if (star.alpha >= 1 || star.alpha <= 0.15) {
-                    star.speed = -star.speed;
-                }
-            });
-            requestAnimationFrame(drawStars);
-        }
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        playIcon.className = 'fas fa-pause';
+        playIcon.style.marginLeft = '0px';
+        startTimer();
+      } else {
+        isPlaying = false;
+        playIcon.className = 'fas fa-play';
+        playIcon.style.marginLeft = '3px';
+        stopTimer();
+      }
+    }
 
-        initStars();
-        drawStars();
+    // Comutator Start / Stop
+    playBtn.addEventListener('click', () => {
+      if (!player || typeof player.getPlayerState !== 'function') return;
+      
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
 
-        // 2. YouTube Audio Logic (Audio Only - Hidden Video)
-        let player;
-        let updateInterval;
+    // Derulare melodie (Seeking)
+    seekSlider.addEventListener('input', () => {
+      if (!player || !player.getDuration) return;
+      const duration = player.getDuration();
+      const seekTo = (seekSlider.value / 100) * duration;
+      player.seekTo(seekTo, true);
+    });
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player-hidden', {
-                videoId: 'htCnJYPEu8Q', // RAVA - $brotherz$
-                playerVars: {
-                    'playsinline': 1,
-                    'controls': 0,
-                    'disablekb': 1,
-                    'fs': 0,
-                    'rel': 0
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
+    function startTimer() {
+      stopTimer();
+      updateTimer = setInterval(updateProgress, 500);
+    }
 
-        function onPlayerReady(event) {
-            const playPauseBtn = document.getElementById('play-pause-btn');
-            const seekSlider = document.getElementById('seek-bar');
-            const volumeSlider = document.getElementById('volume-bar');
-            const muteBtn = document.getElementById('mute-btn');
+    function stopTimer() {
+      clearInterval(updateTimer);
+    }
 
-            // Set initial volume
-            player.setVolume(volumeSlider.value);
+    function updateProgress() {
+      if (!player || !player.getCurrentTime) return;
+      const current = player.getCurrentTime();
+      const duration = player.getDuration();
 
-            // Play / Pause Toggle
-            playPauseBtn.addEventListener('click', () => {
-                const state = player.getPlayerState();
-                if (state === YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
-            });
+      if (duration > 0) {
+        seekSlider.value = (current / duration) * 100;
+        currentTimeEl.textContent = formatTime(current);
+        durationEl.textContent = formatTime(duration);
+      }
+    }
 
-            // Seek / Derulare
-            seekSlider.addEventListener('input', () => {
-                const duration = player.getDuration();
-                const newTime = (seekSlider.value / 100) * duration;
-                player.seekTo(newTime, true);
-                document.getElementById('current-time').textContent = formatTime(newTime);
-            });
+    function updateDuration() {
+      if (player && player.getDuration) {
+        durationEl.textContent = formatTime(player.getDuration());
+      }
+    }
 
-            // Volume adjustment
-            volumeSlider.addEventListener('input', () => {
-                player.setVolume(volumeSlider.value);
-                updateVolumeIcon(volumeSlider.value);
-            });
-
-            // Mute button
-            muteBtn.addEventListener('click', () => {
-                if (player.isMuted()) {
-                    player.unMute();
-                    volumeSlider.value = player.getVolume();
-                    updateVolumeIcon(player.getVolume());
-                } else {
-                    player.mute();
-                    updateVolumeIcon(0);
-                }
-            });
-
-            const duration = player.getDuration();
-            if (duration) {
-                document.getElementById('duration-time').textContent = formatTime(duration);
-            }
-        }
-
-        function onPlayerStateChange(event) {
-            const playIcon = document.getElementById('play-icon');
-            const statusBadge = document.getElementById('player-status-badge');
-            const discIcon = document.getElementById('music-disc-icon');
-
-            if (event.data === YT.PlayerState.PLAYING) {
-                playIcon.className = 'fa-solid fa-pause text-base';
-                statusBadge.textContent = 'În redare...';
-                statusBadge.className = 'text-[9px] uppercase tracking-widest text-emerald-400 font-semibold';
-                discIcon.classList.add('animate-spin');
-                startTimer();
-            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                playIcon.className = 'fa-solid fa-play text-base translate-x-0.5';
-                statusBadge.textContent = 'Oprit';
-                statusBadge.className = 'text-[9px] uppercase tracking-widest text-zinc-500 font-semibold';
-                discIcon.classList.remove('animate-spin');
-                stopTimer();
-            }
-        }
-
-        function startTimer() {
-            stopTimer();
-            updateInterval = setInterval(() => {
-                if (player && player.getCurrentTime) {
-                    const currentTime = player.getCurrentTime();
-                    const duration = player.getDuration();
-
-                    document.getElementById('current-time').textContent = formatTime(currentTime);
-                    if (duration > 0) {
-                        document.getElementById('duration-time').textContent = formatTime(duration);
-                        document.getElementById('seek-bar').value = (currentTime / duration) * 100;
-                    }
-                }
-            }, 500);
-        }
-
-        function stopTimer() {
-            clearInterval(updateInterval);
-        }
-
-        function formatTime(seconds) {
-            if (isNaN(seconds) || seconds <= 0) return "00:00";
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function updateVolumeIcon(vol) {
-            const icon = document.getElementById('volume-icon');
-            if (vol == 0) {
-                icon.className = 'fa-solid fa-volume-xmark text-xs';
-            } else if (vol < 50) {
-                icon.className = 'fa-solid fa-volume-low text-xs';
-            } else {
-                icon.className = 'fa-solid fa-volume-high text-xs';
-            }
-        }
-    </script>
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+  </script>
 </body>
 </html>
