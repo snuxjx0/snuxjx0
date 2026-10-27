@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    /* Ecranul de întâmpinare pentru pornirea sunetului (Click to Enter) */
+    /* Ecranul de întâmpinare pentru pornirea sunetului */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -264,7 +264,7 @@
 </head>
 <body>
 
-  <!-- Ecran de întâmpinare pentru a debloca sunetul instant la prima vizită -->
+  <!-- Ecran de întâmpinare -->
   <div id="welcome-overlay">
     <div class="welcome-box">
       <h1 class="welcome-title">@snuxjx0</h1>
@@ -301,8 +301,8 @@
     <!-- Card Player Audio -->
     <div class="player-card">
       <div class="track-info">
-        <div class="track-title">$brotherz$</div>
-        <div class="track-artist">RAVA</div>
+        <div class="track-title">mr. idcash</div>
+        <div class="track-artist">IDK</div>
       </div>
 
       <!-- Buton Start / Stop -->
@@ -317,7 +317,7 @@
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-display">
           <span id="current-time">0:00</span>
-          <span id="duration">3:54</span>
+          <span id="duration">2:27</span>
         </div>
       </div>
 
@@ -418,7 +418,7 @@
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        videoId: 'htCnJYPEu8Q',
+        videoId: 'EcTxjdHE6sw',
         playerVars: {
           'autoplay': 0,
           'controls': 0,
@@ -436,14 +436,12 @@
       player.setVolume(100);
       updateDuration();
 
-      // Când utilizatorul dă click pe ecranul de întâmpinare
       welcomeOverlay.addEventListener('click', () => {
         welcomeOverlay.style.opacity = '0';
         setTimeout(() => {
           welcomeOverlay.style.display = 'none';
         }, 500);
 
-        // Pornește melodia instant la volum maxim
         player.playVideo();
       });
     }
@@ -479,7 +477,6 @@
       player.seekTo(seekTo, true);
     });
 
-    // Control volum
     volumeSlider.addEventListener('input', () => {
       if (!player || !player.setVolume) return;
       const vol = volumeSlider.value;
