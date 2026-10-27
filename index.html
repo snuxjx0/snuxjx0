@@ -44,7 +44,7 @@
       align-items: center;
       gap: 25px;
       padding: 20px;
-      max-width: 380px;
+      max-width: 400px;
       width: 90%;
     }
 
@@ -90,101 +90,31 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card Player Audio Personalizat */
+    /* Card SoundCloud Player */
     .player-card {
       width: 100%;
       background: rgba(12, 12, 12, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 24px;
+      padding: 15px;
       backdrop-filter: blur(16px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 10px;
     }
 
-    .track-info {
-      text-align: center;
+    .soundcloud-wrapper {
       width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
-    .track-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .track-artist {
-      font-size: 0.85rem;
-      color: #aaaaaa;
-      font-weight: 500;
-    }
-
-    /* Controale */
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .soundcloud-wrapper iframe {
       width: 100%;
-    }
-
-    .play-btn {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background: #ffffff;
-      color: #000000;
+      height: 166px;
       border: none;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.3rem;
-      transition: all 0.2s ease;
-    }
-
-    .play-btn:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-    }
-
-    /* Bară de progres */
-    .progress-container {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .time-display {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: #a0a0a0;
-      font-family: monospace;
-    }
-
-    .seek-slider {
-      width: 100%;
-      height: 5px;
-      -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .seek-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
-      box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
   </style>
 </head>
@@ -192,9 +122,6 @@
 
   <!-- Fundalul alb-negru cu stele și planete -->
   <canvas id="space-canvas"></canvas>
-
-  <!-- Player Audio Direct (Poți schimba src-ul cu link-ul tău direct de fișier .mp3 dacă dorești) -->
-  <audio id="audio-player" src="rava.mp3" preload="metadata" loop></audio>
 
   <div class="main-container">
     
@@ -214,27 +141,15 @@
       </div>
     </div>
 
-    <!-- Card Player Audio -->
+    <!-- Music Player SoundCloud -->
     <div class="player-card">
-      <div class="track-info">
-        <div class="track-title">$brotherz$</div>
-        <div class="track-artist">RAVA</div>
-      </div>
-
-      <!-- Buton Start / Stop -->
-      <div class="controls">
-        <button class="play-btn" id="play-btn">
-          <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
-        </button>
-      </div>
-
-      <!-- Bara de derulare și minutajul -->
-      <div class="progress-container">
-        <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
-        <div class="time-display">
-          <span id="current-time">0:00</span>
-          <span id="duration">3:54</span>
-        </div>
+      <div class="soundcloud-wrapper">
+        <iframe 
+          scrolling="no" 
+          frameborder="no" 
+          allow="autoplay" 
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2060144932&color=%23ffffff&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
+        </iframe>
       </div>
     </div>
 
@@ -308,52 +223,6 @@
       requestAnimationFrame(drawSpace);
     }
     drawSpace();
-  </script>
-
-  <!-- Script Control Player Audio -->
-  <script>
-    const audio = document.getElementById('audio-player');
-    const playBtn = document.getElementById('play-btn');
-    const playIcon = document.getElementById('play-icon');
-    const seekSlider = document.getElementById('seek-slider');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationEl = document.getElementById('duration');
-
-    playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play().then(() => {
-          playIcon.className = 'fas fa-pause';
-          playIcon.style.marginLeft = '0px';
-        }).catch(err => {
-          console.log("Play error: ", err);
-        });
-      } else {
-        audio.pause();
-        playIcon.className = 'fas fa-play';
-        playIcon.style.marginLeft = '3px';
-      }
-    });
-
-    audio.addEventListener('timeupdate', () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
-        const progress = (audio.currentTime / audio.duration) * 100;
-        seekSlider.value = progress;
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        durationEl.textContent = formatTime(audio.duration);
-      }
-    });
-
-    seekSlider.addEventListener('input', () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
-        audio.currentTime = (seekSlider.value / 100) * audio.duration;
-      }
-    });
-
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
   </script>
 </body>
 </html>
