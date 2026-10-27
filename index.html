@@ -1,231 +1,80 @@
 
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#030303">
-<title>@snuxjx0 | My Space</title>
-
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;min-height:100svh;
-  background:#020203;color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-  display:grid;place-items:center;
-  overflow-x:hidden;padding:25px 16px
-}
-#space{
-  position:fixed;inset:0;overflow:hidden;
-  pointer-events:none;
-  background:radial-gradient(ellipse at center,#111119 0%,#020203 72%)
-}
-.star{
-  position:absolute;width:2px;height:2px;
-  border-radius:50%;background:white;
-  animation:twinkle var(--speed) ease-in-out infinite alternate
-}
-@keyframes twinkle{
-  from{opacity:.1;transform:scale(.7)}
-  to{opacity:.95;transform:scale(1.5)}
-}
-.planet{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 30% 25%,#eee,#888 25%,#333 55%,#080808 80%);
-  box-shadow:0 0 25px #fff2;
-  animation:float 8s ease-in-out infinite
-}
-.p1{width:25px;height:25px;left:45%;top:20%}
-.p2{width:48px;height:48px;left:9%;top:75%;animation-delay:-2s}
-.p3{width:58px;height:58px;right:10%;top:12%;animation-delay:-4s}
-.ring{
-  position:absolute;width:90px;height:27px;
-  border:2px solid #aaa9;border-radius:50%;
-  left:50%;top:50%;
-  transform:translate(-50%,-50%) rotate(-25deg)
-}
-@keyframes float{50%{translate:0 -15px}}
-main{
-  position:relative;width:min(440px,100%);
-  animation:appear 1s ease
-}
-@keyframes appear{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.profile{
-  display:flex;align-items:center;justify-content:center;
-  gap:18px;margin-bottom:30px
-}
-.steam-avatar{
-  width:82px;height:82px;flex-shrink:0;
-  display:grid;place-items:center;
-  border:1px solid #777;border-radius:50%;
-  color:#fff;background:linear-gradient(145deg,#292929,#080808);
-  text-decoration:none;
-  box-shadow:0 0 25px #fff2;
-  transition:.25s
-}
-.steam-avatar:hover{
-  transform:scale(1.06);
-  box-shadow:0 0 28px #8abaff55
-}
-.steam-avatar svg{width:48px;height:48px;fill:currentColor}
-h1{font-size:29px;letter-spacing:-1px;margin:0 0 12px}
-.socials{display:flex;gap:10px}
-.social{
-  width:38px;height:38px;display:grid;place-items:center;
-  border:1px solid #444;border-radius:50%;
-  color:white;background:#111;text-decoration:none;
-  transition:.2s;font-size:17px
-}
-.social:hover{background:#333;transform:translateY(-3px)}
-.social svg{width:19px;height:19px;fill:currentColor}
-.player{
-  border:1px solid #333;border-radius:19px;
-  padding:16px;background:#0b0b0be8;
-  backdrop-filter:blur(16px);
-  box-shadow:0 12px 45px #0009
-}
-.track{display:flex;align-items:center;gap:12px}
-.cover{
-  width:48px;height:48px;flex-shrink:0;
-  display:grid;place-items:center;border:1px solid #444;
-  border-radius:9px;background:linear-gradient(145deg,#555,#090909);
-  font-size:11px;font-weight:bold;letter-spacing:1px
-}
-.info{flex:1;min-width:0}
-.title{font-size:14px;font-weight:bold;margin-bottom:5px}
-.artist{font-size:10px;letter-spacing:1.5px;color:#888}
-.badge{
-  color:#aaa;border:1px solid #333;border-radius:5px;
-  padding:5px 7px;font-size:9px;white-space:nowrap
-}
-.player-frame{
-  width:100%;aspect-ratio:16/9;
-  margin-top:15px;overflow:hidden;border-radius:10px;
-  background:#000
-}
-.player-frame iframe{width:100%;height:100%;border:0}
-.note{color:#888;font-size:11px;line-height:1.5;margin:12px 0 0}
-.youtube-link{
-  display:flex;align-items:center;justify-content:center;
-  gap:8px;width:100%;margin-top:12px;padding:11px;
-  border:1px solid #333;border-radius:10px;
-  background:#151515;color:white;text-decoration:none;font-size:12px;
-  transition:.2s
-}
-.youtube-link:hover{background:#292929}
-.youtube-link svg{width:18px;height:18px;fill:#ff3333}
-.footer{
-  text-align:center;margin-top:22px;color:#666;
-  font-size:10px;letter-spacing:3px
-}
-@media(max-width:380px){
-  .profile{gap:12px}
-  .steam-avatar{width:68px;height:68px}
-  .steam-avatar svg{width:40px;height:40px}
-  h1{font-size:25px}
-  .player{padding:12px}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important
-  }
-}
-</style>
-</head>
-
-<body>
-<div id="space" aria-hidden="true">
-  <div class="planet p1"></div>
-  <div class="planet p2"></div>
-  <div class="planet p3"><div class="ring"></div></div>
-</div>
-
-<main>
-  <header class="profile">
-    <a class="steam-avatar"
-       href="https://steamcommunity.com/profiles/76561199860743512/"
-       target="_blank" rel="noopener noreferrer"
-       title="Profilul meu Steam" aria-label="Deschide Steam">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 2a10 10 0 0 0-9.93 11.15l5.36 2.22a3.3 3.3 0 0 1 1.88-.58l2.38-3.45a4.1 4.1 0 1 1 2.2 1.36l-3.42 2.43a3.32 3.32 0 0 1-6.57.73L2.08 14.3A10 10 0 1 0 12 2zm4.05 8.38a2.42 2.42 0 1 0 0-4.84 2.42 2.42 0 0 0 0 4.84zM8.95 18.7a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6z"/>
-      </svg>
-    </a>
-
-    <div>
-      <h1>@snuxjx0</h1>
-      <nav class="socials" aria-label="Rețele sociale">
-        <a class="social"
-           href="https://www.tiktok.com/@snuxjx0"
-           target="_blank" rel="noopener noreferrer"
-           title="TikTok" aria-label="TikTok">♪</a>
-
-        <a class="social"
-           href="https://www.youtube.com/channel/UCle_4iUv6SlScmpA6T1eJTQ"
-           target="_blank" rel="noopener noreferrer"
-           title="Canalul meu YouTube" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6z"/>
-          </svg>
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <section class="player" aria-label="Player muzical YouTube">
-    <div class="track">
-      <div class="cover">MUSIC</div>
-      <div class="info">
-        <div class="title">Till I Collapse</div>
-        <div class="artist">Eminem</div>
-      </div>
-      <span class="badge">YOUTUBE</span>
-    </div>
-
-    <div class="player-frame">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/htCnJYPEu8Q?playsinline=1&rel=0"
-        title="Muzică YouTube"
-        loading="lazy"
-        allow="encrypted-media; picture-in-picture; fullscreen"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-      </iframe>
-    </div>
-
-    <p class="note">
-      Apasă Play în player pentru a porni muzica. Poți folosi comenzile
-      YouTube pentru pauză, derulare și volum.
-    </p>
-
-    <a class="youtube-link"
-       href="https://www.youtube.com/channel/UCle_4iUv6SlScmpA6T1eJTQ"
-       target="_blank" rel="noopener noreferrer">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6z"/>
-      </svg>
-      ABONEAZĂ-TE LA CANALUL MEU
-    </a>
-  </section>
-
-  <footer class="footer">WELCOME TO MY SPACE</footer>
-</main>
-
 <script>
-const space=document.getElementById("space");
-for(let i=0;i<180;i++){
-  const star=document.createElement("span");
-  star.className="star";
-  star.style.left=Math.random()*100+"%";
-  star.style.top=Math.random()*100+"%";
-  star.style.setProperty("--speed",(2+Math.random()*5)+"s");
-  star.style.animationDelay=(-Math.random()*5)+"s";
+const space = document.getElementById("space");
+
+for (let i = 0; i < 180; i++) {
+  const star = document.createElement("span");
+  star.className = "star";
+  star.style.left = Math.random() * 100 + "%";
+  star.style.top = Math.random() * 100 + "%";
+  star.style.setProperty("--speed", (2 + Math.random() * 5) + "s");
+  star.style.animationDelay = (-Math.random() * 5) + "s";
   space.appendChild(star);
 }
+
+const audio = document.getElementById("audio");
+const play = document.getElementById("play");
+const seek = document.getElementById("seek");
+const vol = document.getElementById("vol");
+const status = document.getElementById("status");
+
+audio.volume = 0.7;
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+  return Math.floor(seconds / 60) + ":" +
+    String(Math.floor(seconds % 60)).padStart(2, "0");
+}
+
+play.addEventListener("click", async () => {
+  if (audio.paused) {
+    try {
+      await audio.play();
+    } catch {
+      status.textContent = "Verifică fișierul rava.mp3.";
+    }
+  } else {
+    audio.pause();
+  }
+});
+
+audio.addEventListener("play", () => {
+  play.textContent = "Ⅱ";
+  status.textContent = "Se redă acum.";
+});
+
+audio.addEventListener("pause", () => {
+  play.textContent = "▶";
+});
+
+audio.addEventListener("loadedmetadata", () => {
+  document.getElementById("duration").textContent =
+    formatTime(audio.duration);
+  status.textContent = "RAVA - $brotherz$";
+});
+
+audio.addEventListener("timeupdate", () => {
+  document.getElementById("current").textContent =
+    formatTime(audio.currentTime);
+
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    seek.value = audio.currentTime / audio.duration * 100;
+  }
+});
+
+seek.addEventListener("input", () => {
+  if (Number.isFinite(audio.duration) && audio.duration > 0) {
+    audio.currentTime = Number(seek.value) / 100 * audio.duration;
+  }
+});
+
+vol.addEventListener("input", () => {
+  audio.volume = Number(vol.value);
+  document.getElementById("volText").textContent =
+    Math.round(audio.volume * 100) + "%";
+});
+
+audio.addEventListener("error", () => {
+  status.textContent = "Încarcă fișierul audio rava.mp3 în repository.";
+});
 </script>
-</body>
-</html>
