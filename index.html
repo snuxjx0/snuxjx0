@@ -15,7 +15,7 @@
 
     body {
       min-height: 100vh;
-      background: #000000;
+      background: #050508;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #ffffff;
       display: flex;
@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    /* Canvas pentru stele și planete alb-negru */
+    /* Canvas pentru stele și planete în mișcare */
     #space-canvas {
       position: absolute;
       top: 0;
@@ -42,9 +42,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 25px;
+      gap: 20px;
       padding: 20px;
-      max-width: 380px;
+      max-width: 420px;
       width: 90%;
     }
 
@@ -60,7 +60,7 @@
       font-size: 2.2rem;
       font-weight: 800;
       letter-spacing: 1px;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
     }
 
     .social-links {
@@ -87,22 +87,22 @@
     .social-btn:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
     }
 
-    /* Card Player Audio Personalizat */
+    /* Card Player */
     .player-card {
       width: 100%;
-      background: rgba(12, 12, 12, 0.85);
+      background: rgba(15, 15, 22, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 24px;
+      padding: 20px;
       backdrop-filter: blur(16px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 15px;
     }
 
     .track-info {
@@ -111,16 +111,32 @@
     }
 
     .track-title {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .track-artist {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: #aaaaaa;
       font-weight: 500;
+    }
+
+    /* Player Container YouTube Integration */
+    .video-frame-container {
+      width: 100%;
+      height: 180px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .video-frame-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     /* Controale */
@@ -132,8 +148,8 @@
     }
 
     .play-btn {
-      width: 55px;
-      height: 55px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: #ffffff;
       color: #000000;
@@ -142,13 +158,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       transition: all 0.2s ease;
     }
 
     .play-btn:hover {
       transform: scale(1.08);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     }
 
     /* Bară de progres */
@@ -156,7 +172,7 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .time-display {
@@ -184,17 +200,14 @@
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(0,0,0,0.8);
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
     }
   </style>
 </head>
 <body>
 
-  <!-- Fundalul alb-negru cu stele și planete -->
+  <!-- Fundalul cu stele și planete -->
   <canvas id="space-canvas"></canvas>
-
-  <!-- Elementul Audio HTML5 care citește fișierul rava.mp3 -->
-  <audio id="audio-player" src="rava.mp3" preload="metadata"></audio>
 
   <div class="main-container">
     
@@ -214,17 +227,22 @@
       </div>
     </div>
 
-    <!-- Card Player Audio -->
+    <!-- Music Player -->
     <div class="player-card">
       <div class="track-info">
-        <div class="track-title">$brotherz$</div>
-        <div class="track-artist">RAVA</div>
+        <div class="track-title">RAVA - $brotherz$</div>
+        <div class="track-artist">Official Music Video</div>
+      </div>
+
+      <!-- Player-ul YouTube -->
+      <div class="video-frame-container">
+        <div id="player"></div>
       </div>
 
       <!-- Buton Start / Stop -->
       <div class="controls">
         <button class="play-btn" id="play-btn">
-          <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
+          <i class="fas fa-play" id="play-icon" style="margin-left: 2px;"></i>
         </button>
       </div>
 
@@ -240,7 +258,7 @@
 
   </div>
 
-  <!-- Animație Spațială Alb-Negru -->
+  <!-- Script Animație Spațială (Stele + Planete) -->
   <script>
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
@@ -252,8 +270,9 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    // Generare Stele
     const stars = [];
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 150; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -263,44 +282,47 @@
       });
     }
 
+    // Generare Planete
     const planets = [
-      { x: canvas.width * 0.15, y: canvas.height * 0.2, radius: 28, color: '#222222', strokeColor: '#ffffff', glow: '#ffffff', angle: 0, speed: 0.002, orbitRadius: 15 },
-      { x: canvas.width * 0.85, y: canvas.height * 0.75, radius: 38, color: '#111111', strokeColor: '#cccccc', glow: '#aaaaaa', ring: true, angle: Math.PI, speed: 0.0015, orbitRadius: 20 }
+      { x: canvas.width * 0.15, y: canvas.height * 0.2, radius: 25, color: '#4a90e2', angle: 0, speed: 0.002, orbitRadius: 15 },
+      { x: canvas.width * 0.85, y: canvas.height * 0.75, radius: 40, color: '#d05c48', ring: true, angle: Math.PI, speed: 0.0015, orbitRadius: 20 }
     ];
 
     function drawSpace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Desenează Stelele
       stars.forEach(star => {
         star.alpha += star.speed;
         if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+        
         ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
       });
 
+      // Desenează Planetele cu mișcare de orbitare
       planets.forEach(p => {
         p.angle += p.speed;
         const currentX = p.x + Math.cos(p.angle) * p.orbitRadius;
         const currentY = p.y + Math.sin(p.angle) * p.orbitRadius;
 
+        // Planeta
         ctx.beginPath();
         ctx.arc(currentX, currentY, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.strokeStyle = p.strokeColor;
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = p.glow;
-        ctx.shadowBlur = 12;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 15;
         ctx.fill();
-        ctx.stroke();
         ctx.shadowBlur = 0;
 
+        // Inel planetă (Saturn style)
         if (p.ring) {
           ctx.beginPath();
-          ctx.ellipse(currentX, currentY, p.radius * 1.9, p.radius * 0.45, Math.PI / 6, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-          ctx.lineWidth = 2.5;
+          ctx.ellipse(currentX, currentY, p.radius * 1.8, p.radius * 0.5, Math.PI / 6, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(210, 160, 130, 0.6)';
+          ctx.lineWidth = 4;
           ctx.stroke();
         }
       });
@@ -310,46 +332,96 @@
     drawSpace();
   </script>
 
-  <!-- Script Control Player Audio -->
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    const audio = document.getElementById('audio-player');
+    let player;
+    let isPlaying = false;
+    let updateTimer;
+
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const seekSlider = document.getElementById('seek-slider');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
 
-    playBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play().then(() => {
-          playIcon.className = 'fas fa-pause';
-          playIcon.style.marginLeft = '0px';
-        }).catch(err => console.log("Play error: ", err));
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: 'htCnJYPEu8Q',
+        playerVars: {
+          'autoplay': 0,
+          'controls': 1,
+          'modestbranding': 1,
+          'rel': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      updateDuration();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        playIcon.className = 'fas fa-pause';
+        playIcon.style.marginLeft = '0px';
+        startTimer();
       } else {
-        audio.pause();
+        isPlaying = false;
         playIcon.className = 'fas fa-play';
-        playIcon.style.marginLeft = '3px';
+        playIcon.style.marginLeft = '2px';
+        stopTimer();
       }
-    });
+    }
 
-    audio.addEventListener('loadedmetadata', () => {
-      durationEl.textContent = formatTime(audio.duration);
-    });
-
-    audio.addEventListener('timeupdate', () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
-        const progress = (audio.currentTime / audio.duration) * 100;
-        seekSlider.value = progress;
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        durationEl.textContent = formatTime(audio.duration);
+    playBtn.addEventListener('click', () => {
+      if (!player || typeof player.getPlayerState !== 'function') return;
+      
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
       }
     });
 
     seekSlider.addEventListener('input', () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
-        audio.currentTime = (seekSlider.value / 100) * audio.duration;
-      }
+      if (!player || !player.getDuration) return;
+      const duration = player.getDuration();
+      const seekTo = (seekSlider.value / 100) * duration;
+      player.seekTo(seekTo, true);
     });
+
+    function startTimer() {
+      stopTimer();
+      updateTimer = setInterval(updateProgress, 500);
+    }
+
+    function stopTimer() {
+      clearInterval(updateTimer);
+    }
+
+    function updateProgress() {
+      if (!player || !player.getCurrentTime) return;
+      const current = player.getCurrentTime();
+      const duration = player.getDuration();
+
+      if (duration > 0) {
+        seekSlider.value = (current / duration) * 100;
+        currentTimeEl.textContent = formatTime(current);
+        durationEl.textContent = formatTime(duration);
+      }
+    }
+
+    function updateDuration() {
+      if (player && player.getDuration) {
+        durationEl.textContent = formatTime(player.getDuration());
+      }
+    }
 
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
