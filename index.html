@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    /* Canvas pentru stele și planete alb-negru în mișcare */
+    /* Canvas pentru stele și planete alb-negru */
     #space-canvas {
       position: absolute;
       top: 0;
@@ -33,17 +33,6 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-    }
-
-    /* Ascundem complet playerul vizual YouTube, dar îl lăsăm activ pentru audio */
-    #hidden-youtube-player {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
     }
 
     /* Containerul principal pe mijlocul ecranului */
@@ -204,10 +193,8 @@
   <!-- Fundalul alb-negru cu stele și planete -->
   <canvas id="space-canvas"></canvas>
 
-  <!-- Playerul YouTube ascuns complet pe ecran, redă doar audio -->
-  <div id="hidden-youtube-player">
-    <div id="player"></div>
-  </div>
+  <!-- Elementul Audio HTML5 care citește fișierul rava.mp3 -->
+  <audio id="audio-player" src="rava.mp3" preload="metadata"></audio>
 
   <div class="main-container">
     
@@ -227,7 +214,7 @@
       </div>
     </div>
 
-    <!-- Music Player Card (Doar audio, fără video vizibil) -->
+    <!-- Card Player Audio -->
     <div class="player-card">
       <div class="track-info">
         <div class="track-title">$brotherz$</div>
@@ -253,7 +240,7 @@
 
   </div>
 
-  <!-- Script Animație Spațială Alb-Negru -->
+  <!-- Animație Spațială Alb-Negru -->
   <script>
     const canvas = document.getElementById('space-canvas');
     const ctx = canvas.getContext('2d');
@@ -265,7 +252,6 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Generare Stele
     const stars = [];
     for (let i = 0; i < 180; i++) {
       stars.push({
@@ -277,7 +263,6 @@
       });
     }
 
-    // Planete Alb-Negru
     const planets = [
       { x: canvas.width * 0.15, y: canvas.height * 0.2, radius: 28, color: '#222222', strokeColor: '#ffffff', glow: '#ffffff', angle: 0, speed: 0.002, orbitRadius: 15 },
       { x: canvas.width * 0.85, y: canvas.height * 0.75, radius: 38, color: '#111111', strokeColor: '#cccccc', glow: '#aaaaaa', ring: true, angle: Math.PI, speed: 0.0015, orbitRadius: 20 }
@@ -286,24 +271,20 @@
     function drawSpace() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Desenează Stelele
       stars.forEach(star => {
         star.alpha += star.speed;
         if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
-        
         ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Desenează Planetele Alb-Negru
       planets.forEach(p => {
         p.angle += p.speed;
         const currentX = p.x + Math.cos(p.angle) * p.orbitRadius;
         const currentY = p.y + Math.sin(p.angle) * p.orbitRadius;
 
-        // Corpul Planetei
         ctx.beginPath();
         ctx.arc(currentX, currentY, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
@@ -315,7 +296,6 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Inelul Planetei (Alb-Negru)
         if (p.ring) {
           ctx.beginPath();
           ctx.ellipse(currentX, currentY, p.radius * 1.9, p.radius * 0.45, Math.PI / 6, 0, Math.PI * 2);
@@ -330,97 +310,46 @@
     drawSpace();
   </script>
 
-  <!-- YouTube IFrame API pentru redare audio ascunsă -->
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Script Control Player Audio -->
   <script>
-    let player;
-    let isPlaying = false;
-    let updateTimer;
-
+    const audio = document.getElementById('audio-player');
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const seekSlider = document.getElementById('seek-slider');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
 
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        videoId: 'htCnJYPEu8Q',
-        playerVars: {
-          'autoplay': 0,
-          'controls': 0,
-          'disablekb': 1,
-          'enablejsapi': 1
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-    }
-
-    function onPlayerReady(event) {
-      player.setVolume(100);
-      updateDuration();
-    }
-
-    function onPlayerStateChange(event) {
-      if (event.data === YT.PlayerState.PLAYING) {
-        isPlaying = true;
-        playIcon.className = 'fas fa-pause';
-        playIcon.style.marginLeft = '0px';
-        startTimer();
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().then(() => {
+          playIcon.className = 'fas fa-pause';
+          playIcon.style.marginLeft = '0px';
+        }).catch(err => console.log("Play error: ", err));
       } else {
-        isPlaying = false;
+        audio.pause();
         playIcon.className = 'fas fa-play';
         playIcon.style.marginLeft = '3px';
-        stopTimer();
       }
-    }
+    });
 
-    playBtn.addEventListener('click', () => {
-      if (!player || typeof player.getPlayerState !== 'function') return;
-      
-      if (isPlaying) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
+    audio.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (!isNaN(audio.duration) && audio.duration > 0) {
+        const progress = (audio.currentTime / audio.duration) * 100;
+        seekSlider.value = progress;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        durationEl.textContent = formatTime(audio.duration);
       }
     });
 
     seekSlider.addEventListener('input', () => {
-      if (!player || !player.getDuration) return;
-      const duration = player.getDuration();
-      const seekTo = (seekSlider.value / 100) * duration;
-      player.seekTo(seekTo, true);
+      if (!isNaN(audio.duration) && audio.duration > 0) {
+        audio.currentTime = (seekSlider.value / 100) * audio.duration;
+      }
     });
-
-    function startTimer() {
-      stopTimer();
-      updateTimer = setInterval(updateProgress, 500);
-    }
-
-    function stopTimer() {
-      clearInterval(updateTimer);
-    }
-
-    function updateProgress() {
-      if (!player || !player.getCurrentTime) return;
-      const current = player.getCurrentTime();
-      const duration = player.getDuration();
-
-      if (duration > 0) {
-        seekSlider.value = (current / duration) * 100;
-        currentTimeEl.textContent = formatTime(current);
-        durationEl.textContent = formatTime(duration);
-      }
-    }
-
-    function updateDuration() {
-      if (player && player.getDuration) {
-        durationEl.textContent = formatTime(player.getDuration());
-      }
-    }
 
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
