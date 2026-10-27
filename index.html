@@ -25,6 +25,57 @@
       position: relative;
     }
 
+    /* Ecranul de întâmpinare pentru pornirea sunetului (Click to Enter) */
+    #welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+
+    .welcome-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .welcome-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+
+    .welcome-btn {
+      padding: 12px 30px;
+      border-radius: 30px;
+      background: #ffffff;
+      color: #000000;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .welcome-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
+    }
+
     /* Canvas pentru stele și planete alb-negru */
     #space-canvas {
       position: absolute;
@@ -200,7 +251,7 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
 
-    /* Ascundem iframe-ul YouTube în fundal */
+    /* Ascundem player-ul YouTube în fundal */
     #hidden-yt-container {
       position: absolute;
       width: 0;
@@ -212,6 +263,14 @@
   </style>
 </head>
 <body>
+
+  <!-- Ecran de întâmpinare pentru a debloca sunetul instant la prima vizită -->
+  <div id="welcome-overlay">
+    <div class="welcome-box">
+      <h1 class="welcome-title">@snuxjx0</h1>
+      <button class="welcome-btn">Click pentru a intra</button>
+    </div>
+  </div>
 
   <!-- Fundalul alb-negru cu stele și planete -->
   <canvas id="space-canvas"></canvas>
@@ -341,7 +400,7 @@
     drawSpace();
   </script>
 
-  <!-- YouTube IFrame API -->
+  <!-- YouTube IFrame API & Logica de Autoplay -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
@@ -355,12 +414,13 @@
     const volumeIcon = document.getElementById('volume-icon');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
+    const welcomeOverlay = document.getElementById('welcome-overlay');
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
         videoId: 'htCnJYPEu8Q',
         playerVars: {
-          'autoplay': 1,
+          'autoplay': 0,
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1
@@ -373,23 +433,19 @@
     }
 
     function onPlayerReady(event) {
-      player.mute(); // Pornim mut pentru a trece de blocajul de Autoplay din browsere
-      player.playVideo();
+      player.setVolume(100);
       updateDuration();
 
-      // La primul click/interacțiune oriunde în pagină, scoatem mutul (unmute) automat
-      const unmuteOnInteraction = () => {
-        if (player && player.isMuted) {
-          player.unMute();
-          player.setVolume(100);
-          volumeSlider.value = 100;
-        }
-        window.removeEventListener('click', unmuteOnInteraction);
-        window.removeEventListener('touchstart', unmuteOnInteraction);
-      };
+      // Când utilizatorul dă click pe ecranul de întâmpinare
+      welcomeOverlay.addEventListener('click', () => {
+        welcomeOverlay.style.opacity = '0';
+        setTimeout(() => {
+          welcomeOverlay.style.display = 'none';
+        }, 500);
 
-      window.addEventListener('click', unmuteOnInteraction);
-      window.addEventListener('touchstart', unmuteOnInteraction);
+        // Pornește melodia instant la volum maxim
+        player.playVideo();
+      });
     }
 
     function onPlayerStateChange(event) {
@@ -412,9 +468,6 @@
       if (isPlaying) {
         player.pauseVideo();
       } else {
-        if (player.isMuted()) {
-          player.unMute();
-        }
         player.playVideo();
       }
     });
@@ -430,9 +483,6 @@
     volumeSlider.addEventListener('input', () => {
       if (!player || !player.setVolume) return;
       const vol = volumeSlider.value;
-      if (player.isMuted()) {
-        player.unMute();
-      }
       player.setVolume(vol);
 
       if (vol == 0) {
