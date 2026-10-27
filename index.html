@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@snuxjx0</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:#020203;
+  color:white;
+  font-family:Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+#space{position:fixed;inset:0;pointer-events:none}
+.star{
+  position:absolute;
+  width:2px;height:2px;
+  border-radius:50%;
+  background:white;
+  animation:twinkle 3s infinite alternate;
+}
+@keyframes twinkle{from{opacity:.15}to{opacity:.9}}
+.planet{
+  position:absolute;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,#eee,#777 30%,#111 75%);
+  box-shadow:0 0 25px #ffffff18;
+  animation:float 7s ease-in-out infinite;
+}
+.p1{width:25px;height:25px;left:47%;top:22%}
+.p2{width:48px;height:48px;left:11%;top:72%}
+.p3{width:55px;height:55px;right:11%;top:10%}
+.ring{
+  position:absolute;
+  width:90px;height:25px;
+  border:2px solid #888;
+  border-radius:50%;
+  transform:rotate(-25deg);
+  left:50%;top:50%;
+  translate:-50% -50%;
+}
+@keyframes float{50%{translate:0 -15px}}
+main{
+  position:relative;
+  width:min(460px,calc(100% - 32px));
+  animation:appear 1.2s ease;
+}
+@keyframes appear{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.profile{
+  display:flex;align-items:center;
+  justify-content:center;gap:18px;
+  margin-bottom:34px;
+}
+.avatar{
+  width:86px;height:86px;flex-shrink:0;
+  border:2px solid #aaa;padding:4px;
+  border-radius:50%;
+  box-shadow:0 0 20px #ffffff20;
+}
+.avatar div{
+  width:100%;height:100%;border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle,#555,#111);
+  font-size:25px;font-weight:bold;
+}
+h1{font-size:29px;margin:0 0 12px}
+.socials{display:flex;gap:10px}
+.socials a{
+  width:38px;height:38px;border:1px solid #444;
+  border-radius:50%;display:grid;place-items:center;
+  color:white;text-decoration:none;font-size:17px;
+  background:#111;transition:.2s;
+}
+.socials a:hover{background:#333;transform:translateY(-3px)}
+.player{
+  border:1px solid #333;border-radius:19px;
+  padding:16px;background:#0a0a0bd9;
+  backdrop-filter:blur(15px);
+  box-shadow:0 10px 40px #0008;
+}
+.track{display:flex;align-items:center;gap:12px}
+.cover{
+  width:45px;height:45px;flex-shrink:0;
+  display:grid;place-items:center;
+  border:1px solid #444;border-radius:8px;
+  background:linear-gradient(135deg,#444,#090909);
+  font-size:11px;font-weight:bold;
+}
+.info{flex:1;min-width:0}
+.title{font-size:14px;font-weight:bold;margin-bottom:5px}
+.artist{font-size:10px;letter-spacing:1.5px;color:#888}
+.controls{display:flex;align-items:center;gap:6px}
+button{
+  border:0;background:transparent;color:#aaa;
+  cursor:pointer;font-size:17px;padding:7px;
+}
+button:hover{color:white}
+#play{
+  width:43px;height:43px;border-radius:50%;
+  background:#fff;color:#000;font-size:19px;
+}
+.timeline{display:flex;align-items:center;gap:8px;margin-top:13px}
+.time{font-size:10px;color:#999;white-space:nowrap}
+input[type=range]{
+  min-width:0;width:100%;height:4px;
+  accent-color:white;cursor:pointer;
+}
+.volume{
+  display:flex;align-items:center;gap:5px;
+  width:105px;flex-shrink:0;
+  border:1px solid #292929;border-radius:20px;
+  padding:5px 7px;background:#171717;
+}
+.volume span{font-size:10px;color:#aaa}
+.volume input{width:48px}
+.status{font-size:11px;color:#888;margin:12px 0 0}
+.upload{margin-top:12px;border-top:1px solid #292929;padding-top:12px}
+.upload label{display:block;font-size:11px;color:#999;margin-bottom:7px}
+.upload input{width:100%;font-size:11px;color:#aaa}
+.footer{text-align:center;margin-top:23px;color:#666;font-size:10px;letter-spacing:3px}
+@media(max-width:400px){
+  .profile{gap:12px}
+  .avatar{width:70px;height:70px}
+  h1{font-size:25px}
+  .player{padding:12px}
+  .volume{width:85px}
+  .volume input{width:35px}
+}
+</style>
+</head>
+
+<body>
+<div id="space">
+  <div class="planet p1"></div>
+  <div class="planet p2"></div>
+  <div class="planet p3"><div class="ring"></div></div>
+</div>
+
+<main>
+  <header class="profile">
+    <div class="avatar"><div>SN</div></div>
+    <div>
+      <h1>@snuxjx0</h1>
+      <nav class="socials">
+        <a href="https://www.tiktok.com/@snuxjx0" target="_blank" rel="noopener noreferrer" aria-label="TikTok">♪</a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube">▷</a>
+        <a href="https://steamcommunity.com/" target="_blank" rel="noopener noreferrer" aria-label="Steam">◉</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="player">
+    <div class="track">
+      <div class="cover">TIC</div>
+      <div class="info">
+        <div class="title" id="songTitle">Till I Collapse</div>
+        <div class="artist">EMINEM</div>
+      </div>
+      <div class="controls">
+        <button id="back" aria-label="Înapoi 10 secunde">◂</button>
+        <button id="play" aria-label="Redare">▶</button>
+        <button id="forward" aria-label="Înainte 10 secunde">▸</button>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <span class="time" id="current">0:00</span>
+      <input id="seek" type="range" min="0" max="100" value="0" aria-label="Derulare">
+      <span class="time" id="duration">0:00</span>
+      <div class="volume">
+        <span>◖</span>
+        <input id="vol" type="range" min="0" max="1" step="0.01" value="0.3" aria-label="Volum">
+        <span id="volText">30%</span>
+      </div>
+    </div>
+
+    <div class="upload">
+      <label for="file">Alege fișierul audio:</label>
+      <input id="file" type="file" accept="audio/*">
+      <p class="status" id="status">Selectează o melodie pentru a începe.</p>
+    </div>
+
+    <audio id="audio" preload="metadata"></audio>
+  </section>
+
+  <footer class="footer">WELCOME TO MY SPACE</footer>
+</main>
+
+<script>
+const space=document.getElementById("space");
+for(let i=0;i<180;i++){
+  const s=document.createElement("span");
+  s.className="star";
+  s.style.left=Math.random()*100+"%";
+  s.style.top=Math.random()*100+"%";
+  s.style.animationDelay=-Math.random()*5+"s";
+  s.style.animationDuration=2+Math.random()*5+"s";
+  space.appendChild(s);
+}
+
+const audio=document.getElementById("audio");
+const play=document.getElementById("play");
+const seek=document.getElementById("seek");
+const vol=document.getElementById("vol");
+const status=document.getElementById("status");
+let fileURL=null;
+
+function time(s){
+  if(!Number.isFinite(s))return "0:00";
+  return Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+}
+
+play.onclick=async()=>{
+  if(!audio.src){
+    status.textContent="Alege mai întâi un fișier audio.";
+    document.getElementById("file").click();
+    return;
+  }
+  if(audio.paused){
+    try{await audio.play()}
+    catch(e){status.textContent="Nu s-a putut reda fișierul."}
+  }else audio.pause();
+};
+
+audio.onplay=()=>play.textContent="Ⅱ";
+audio.onpause=()=>play.textContent="▶";
+audio.onloadedmetadata=()=>{
+  document.getElementById("duration").textContent=time(audio.duration);
+  status.textContent="Melodie pregătită.";
+};
+audio.ontimeupdate=()=>{
+  document.getElementById("current").textContent=time(audio.currentTime);
+  if(audio.duration)seek.value=audio.currentTime/audio.duration*100;
+};
+audio.onended=()=>play.textContent="▶";
+
+seek.oninput=()=>{
+  if(audio.duration)audio.currentTime=seek.value/100*audio.duration;
+};
+document.getElementById("back").onclick=()=>{
+  if(audio.src)audio.currentTime=Math.max(0,audio.currentTime-10);
+};
+document.getElementById("forward").onclick=()=>{
+  if(audio.src&&Number.isFinite(audio.duration))
+    audio.currentTime=Math.min(audio.duration,audio.currentTime+10);
+};
+vol.oninput=()=>{
+  audio.volume=Number(vol.value);
+  document.getElementById("volText").textContent=Math.round(vol.value*100)+"%";
+};
+audio.volume=.3;
+
+document.getElementById("file").onchange=e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith("audio/")){
+    status.textContent="Alege un fișier audio valid.";
+    return;
+  }
+  if(fileURL)URL.revokeObjectURL(fileURL);
+  fileURL=URL.createObjectURL(file);
+  audio.src=fileURL;
+  audio.load();
+  document.getElementById("songTitle").textContent=file.name.replace(/\.[^.]+$/,"");
+  status.textContent="Apasă Play pentru redare.";
+};
+</script>
+</body>
+</html>
