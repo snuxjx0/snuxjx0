@@ -90,7 +90,7 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card Player Audio (Fără Video) */
+    /* Card Player Audio */
     .player-card {
       width: 100%;
       background: rgba(12, 12, 12, 0.85);
@@ -123,7 +123,7 @@
       font-weight: 500;
     }
 
-    /* Controale */
+    /* Controale Play */
     .controls {
       display: flex;
       align-items: center;
@@ -151,12 +151,25 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
     }
 
-    /* Bară de progres */
-    .progress-container {
+    /* Bară de progres și volum */
+    .progress-container, .volume-container {
       width: 100%;
       display: flex;
       flex-direction: column;
       gap: 8px;
+    }
+
+    .volume-container {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      margin-top: 5px;
+    }
+
+    .volume-icon {
+      font-size: 0.9rem;
+      color: #aaaaaa;
+      width: 15px;
     }
 
     .time-display {
@@ -167,7 +180,7 @@
       font-family: monospace;
     }
 
-    .seek-slider {
+    .seek-slider, .volume-slider {
       width: 100%;
       height: 5px;
       -webkit-appearance: none;
@@ -177,7 +190,7 @@
       cursor: pointer;
     }
 
-    .seek-slider::-webkit-slider-thumb {
+    .seek-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 12px;
       height: 12px;
@@ -187,7 +200,7 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
 
-    /* Ascundem complet iframe-ul YouTube pe ecran, dar păstrăm sunetul activ */
+    /* Ascundem iframe-ul YouTube în fundal */
     #hidden-yt-container {
       position: absolute;
       width: 0;
@@ -203,7 +216,7 @@
   <!-- Fundalul alb-negru cu stele și planete -->
   <canvas id="space-canvas"></canvas>
 
-  <!-- Playerul YouTube ascuns (redă doar audio în fundal) -->
+  <!-- Playerul YouTube ascuns -->
   <div id="hidden-yt-container">
     <div id="player"></div>
   </div>
@@ -226,7 +239,7 @@
       </div>
     </div>
 
-    <!-- Card Player Audio Curat (Fără Video Vizibil) -->
+    <!-- Card Player Audio -->
     <div class="player-card">
       <div class="track-info">
         <div class="track-title">$brotherz$</div>
@@ -247,6 +260,12 @@
           <span id="current-time">0:00</span>
           <span id="duration">3:54</span>
         </div>
+      </div>
+
+      <!-- Bara de volum -->
+      <div class="volume-container">
+        <i class="fas fa-volume-high volume-icon" id="volume-icon"></i>
+        <input type="range" class="volume-slider" id="volume-slider" value="100" min="0" max="100">
       </div>
     </div>
 
@@ -322,7 +341,7 @@
     drawSpace();
   </script>
 
-  <!-- YouTube IFrame API (Rulează audio în fundal fără video vizibil) -->
+  <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
@@ -332,6 +351,8 @@
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const seekSlider = document.getElementById('seek-slider');
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeIcon = document.getElementById('volume-icon');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
 
@@ -339,7 +360,7 @@
       player = new YT.Player('player', {
         videoId: 'htCnJYPEu8Q',
         playerVars: {
-          'autoplay': 0,
+          'autoplay': 1,
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1
@@ -352,8 +373,23 @@
     }
 
     function onPlayerReady(event) {
-      player.setVolume(100);
+      player.mute(); // Pornim mut pentru a trece de blocajul de Autoplay din browsere
+      player.playVideo();
       updateDuration();
+
+      // La primul click/interacțiune oriunde în pagină, scoatem mutul (unmute) automat
+      const unmuteOnInteraction = () => {
+        if (player && player.isMuted) {
+          player.unMute();
+          player.setVolume(100);
+          volumeSlider.value = 100;
+        }
+        window.removeEventListener('click', unmuteOnInteraction);
+        window.removeEventListener('touchstart', unmuteOnInteraction);
+      };
+
+      window.addEventListener('click', unmuteOnInteraction);
+      window.addEventListener('touchstart', unmuteOnInteraction);
     }
 
     function onPlayerStateChange(event) {
@@ -376,6 +412,9 @@
       if (isPlaying) {
         player.pauseVideo();
       } else {
+        if (player.isMuted()) {
+          player.unMute();
+        }
         player.playVideo();
       }
     });
@@ -385,6 +424,24 @@
       const duration = player.getDuration();
       const seekTo = (seekSlider.value / 100) * duration;
       player.seekTo(seekTo, true);
+    });
+
+    // Control volum
+    volumeSlider.addEventListener('input', () => {
+      if (!player || !player.setVolume) return;
+      const vol = volumeSlider.value;
+      if (player.isMuted()) {
+        player.unMute();
+      }
+      player.setVolume(vol);
+
+      if (vol == 0) {
+        volumeIcon.className = 'fas fa-volume-xmark volume-icon';
+      } else if (vol < 50) {
+        volumeIcon.className = 'fas fa-volume-low volume-icon';
+      } else {
+        volumeIcon.className = 'fas fa-volume-high volume-icon';
+      }
     });
 
     function startTimer() {
