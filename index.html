@@ -25,48 +25,6 @@
       position: relative;
     }
 
-    /* Buton Discord colț dreapta sus */
-    .discord-badge {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      background: rgba(15, 15, 20, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 10px 16px;
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #ffffff;
-      text-decoration: none;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-      transition: all 0.3s ease;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .discord-badge:hover {
-      background: rgba(88, 101, 242, 0.25);
-      border-color: rgba(88, 101, 242, 0.5);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
-    }
-
-    .discord-badge i {
-      font-size: 1.2rem;
-      color: #5865F2;
-    }
-
-    .discord-badge span {
-      color: #cccccc;
-    }
-
-    .discord-badge strong {
-      color: #ffffff;
-    }
-
     /* Ecranul de întâmpinare pentru pornirea sunetului */
     #welcome-overlay {
       position: fixed;
@@ -305,12 +263,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Buton Discord în dreapta sus -->
-  <a href="https://discord.com/users/snujx1" target="_blank" class="discord-badge" title="Trimite-mi DM pe Discord">
-    <i class="fab fa-discord"></i>
-    <span>DM for bugs: <strong>snujx1</strong></span>
-  </a>
 
   <!-- Ecran de întâmpinare -->
   <div id="welcome-overlay">
