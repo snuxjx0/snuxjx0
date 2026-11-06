@@ -25,20 +25,20 @@
       position: relative;
     }
 
-    /* Fundalul cu imaginea blurată */
+    /* Fundal cu poza ta locală background.jpeg */
     .bg-overlay {
       position: absolute;
       top: -5%;
       left: -5%;
       width: 110%;
       height: 110%;
-      background: url('bg.jpg') no-repeat center center;
+      background: url('background.jpeg') no-repeat center center;
       background-size: cover;
       filter: blur(4px) brightness(0.4);
       z-index: 1;
     }
 
-    /* Canvas-ul pentru efectul de particule de stele din nume */
+    /* Canvas pentru efectul de particule de la nume */
     #particles-canvas {
       position: absolute;
       top: 0;
@@ -49,7 +49,7 @@
       pointer-events: none;
     }
 
-    /* Ecranul de întâmpinare pentru pornirea sunetului */
+    /* Overlay întâmpinare pentru pornire audio */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -100,14 +100,14 @@
       box-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
     }
 
-    /* Containerul principal pe mijlocul ecranului */
+    /* Container principal */
     .main-container {
       position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 25px;
       padding: 20px;
       max-width: 380px;
       width: 90%;
@@ -118,12 +118,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
       position: relative;
     }
 
     .username {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       font-weight: 800;
       letter-spacing: 1px;
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.4);
@@ -137,8 +137,8 @@
     }
 
     .social-btn {
-      width: 42px;
-      height: 42px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -146,7 +146,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       text-decoration: none;
       transition: all 0.3s ease;
       backdrop-filter: blur(8px);
@@ -164,13 +164,13 @@
       background: rgba(12, 12, 12, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 20px;
+      padding: 24px;
       backdrop-filter: blur(16px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 18px;
     }
 
     .track-info {
@@ -179,14 +179,14 @@
     }
 
     .track-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .track-artist {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #aaaaaa;
       font-weight: 500;
     }
@@ -200,8 +200,8 @@
     }
 
     .play-btn {
-      width: 48px;
-      height: 48px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
       background: #ffffff;
       color: #000000;
@@ -210,7 +210,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
       transition: all 0.2s ease;
     }
 
@@ -219,23 +219,23 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
     }
 
-    /* Bară de progres și volum */
+    /* Bară progres & volum */
     .progress-container, .volume-container {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
     .volume-container {
       flex-direction: row;
       align-items: center;
       gap: 12px;
-      margin-top: 2px;
+      margin-top: 5px;
     }
 
     .volume-icon {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: #aaaaaa;
       width: 15px;
     }
@@ -268,7 +268,6 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
 
-    /* Ascundem player-ul YouTube în fundal */
     #hidden-yt-container {
       position: absolute;
       width: 0;
@@ -281,7 +280,7 @@
 </head>
 <body>
 
-  <!-- Ecran de întâmpinare -->
+  <!-- Overlay Start -->
   <div id="welcome-overlay">
     <div class="welcome-box">
       <h1 class="welcome-title">@snuxjx0</h1>
@@ -289,13 +288,13 @@
     </div>
   </div>
 
-  <!-- Fundalul cu imaginea ta blurată -->
+  <!-- Fundal Imagine -->
   <div class="bg-overlay"></div>
 
-  <!-- Canvas pentru efectul de particule de la nume -->
+  <!-- Canvas Particule -->
   <canvas id="particles-canvas"></canvas>
 
-  <!-- Playerul YouTube ascuns -->
+  <!-- Player YT Ascuns -->
   <div id="hidden-yt-container">
     <div id="player"></div>
   </div>
@@ -318,21 +317,19 @@
       </div>
     </div>
 
-    <!-- Card Player Audio -->
+    <!-- Card Audio Player -->
     <div class="player-card">
       <div class="track-info">
         <div class="track-title">NU YORK</div>
         <div class="track-artist">JET$KI</div>
       </div>
 
-      <!-- Buton Start / Stop -->
       <div class="controls">
         <button class="play-btn" id="play-btn">
           <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
         </button>
       </div>
 
-      <!-- Bara de derulare și minutajul -->
       <div class="progress-container">
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-display">
@@ -341,7 +338,6 @@
         </div>
       </div>
 
-      <!-- Bara de volum -->
       <div class="volume-container">
         <i class="fas fa-volume-high volume-icon" id="volume-icon"></i>
         <input type="range" class="volume-slider" id="volume-slider" value="100" min="0" max="100">
@@ -350,7 +346,7 @@
 
   </div>
 
-  <!-- Animație de Particule de la Nume (Stele) -->
+  <!-- Script Particule de la Nume -->
   <script>
     const pCanvas = document.getElementById('particles-canvas');
     const pCtx = pCanvas.getContext('2d');
@@ -365,7 +361,6 @@
     const particles = [];
     const usernameEl = document.getElementById('username-el');
 
-    // Funcție pentru desenarea unei stele cu 4 colțuri
     function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, alpha) {
       let rot = Math.PI / 2 * 3;
       let x = cx;
@@ -403,7 +398,7 @@
         x: randomX,
         y: randomY,
         vx: (Math.random() - 0.5) * 0.8,
-        vy: -Math.random() * 1.2 - 0.4, // Se ridică în sus
+        vy: -Math.random() * 1.2 - 0.4,
         size: Math.random() * 3 + 2,
         alpha: 1,
         decay: Math.random() * 0.015 + 0.008
@@ -435,13 +430,13 @@
     animateParticles();
   </script>
 
-  <!-- YouTube IFrame API & Logica de sincronizare -->
+  <!-- Script YouTube API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
     let isPlaying = false;
     let updateTimer;
-    const startTime = 43; // Secunda de start reală (0:43)
+    const startTime = 43;
 
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
