@@ -11,7 +11,7 @@
       margin: 0;
       padding: 0;
       user-select: none;
-      cursor: none; /* Ascundem cursorul clasic pentru a folosi punctul luminos */
+      cursor: none;
     }
 
     body {
@@ -26,7 +26,20 @@
       position: relative;
     }
 
-    /* Cursor personalizat (Punct alb cu aură) */
+    /* Fundalul cu imaginea ta și blur fin */
+    .bg-overlay {
+      position: absolute;
+      top: -5%;
+      left: -5%;
+      width: 110%;
+      height: 110%;
+      background: url('background.jpeg') no-repeat center center;
+      background-size: cover;
+      filter: blur(4px) brightness(0.38);
+      z-index: 1;
+    }
+
+    /* Cursor personalizat */
     #custom-cursor {
       position: fixed;
       top: 0;
@@ -40,17 +53,6 @@
       box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.8),
                   0 0 25px 8px rgba(255, 255, 255, 0.4);
       transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    /* Canvas Spațial (Stele și Planete) */
-    #space-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
     }
 
     /* Canvas Particule Stele din Nume */
@@ -142,7 +144,7 @@
       max-width: 460px;
     }
 
-    /* Header Profil (Fără pătrat) */
+    /* Header Profil */
     .profile-section {
       display: flex;
       flex-direction: column;
@@ -187,7 +189,7 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card Player Nou Orizontal */
+    /* Card Player Orizontal */
     .player-card {
       width: 100%;
       background: rgba(12, 12, 14, 0.82);
@@ -213,7 +215,6 @@
       letter-spacing: 1px;
     }
 
-    /* Bara de progres unificată */
     .progress-box {
       width: 100%;
       display: flex;
@@ -247,7 +248,6 @@
       font-family: monospace;
     }
 
-    /* Controale Media pe rând */
     .media-controls {
       display: flex;
       align-items: center;
@@ -294,7 +294,6 @@
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
-    /* Control Volum în dreapta jos */
     .volume-box-inline {
       display: flex;
       align-items: center;
@@ -330,17 +329,17 @@
 </head>
 <body>
 
-  <!-- Elementul pentru Cursorul Personalizat -->
+  <!-- Cursor Personalizat -->
   <div id="custom-cursor"></div>
 
-  <!-- Ecran de întâmpinare cu butonul Liquid ENTER -->
+  <!-- Ecran de întâmpinare -->
   <div id="welcome-overlay">
     <h1 class="welcome-title">@snuxjx0</h1>
     <button class="liquid-btn" id="enter-btn">ENTER</button>
   </div>
 
-  <!-- Fundalul alb-negru cu stele și planete -->
-  <canvas id="space-canvas"></canvas>
+  <!-- Fundal Imagine -->
+  <div class="bg-overlay"></div>
 
   <!-- Canvas Particule Stele din Nume -->
   <canvas id="particles-canvas"></canvas>
@@ -352,7 +351,7 @@
 
   <div class="main-container">
     
-    <!-- Profil Header (Fără pătrat) -->
+    <!-- Profil Header -->
     <div class="profile-section">
       <h1 class="username" id="username-el">@snuxjx0</h1>
       <div class="social-links">
@@ -368,13 +367,12 @@
       </div>
     </div>
 
-    <!-- Player Card Nou Stilizat -->
+    <!-- Player Card -->
     <div class="player-card">
       <div class="track-info">
         <div class="track-title">JET$KI - NU YORK</div>
       </div>
 
-      <!-- Bara de progres + Timp -->
       <div class="progress-box">
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-indicators">
@@ -383,7 +381,6 @@
         </div>
       </div>
 
-      <!-- Controale Media pe rând -->
       <div class="media-controls">
         <button class="control-sub-btn" title="Shuffle"><i class="fas fa-shuffle"></i></button>
         
@@ -413,77 +410,7 @@
     });
   </script>
 
-  <!-- Animație Spațială Alb-Negru (Stele & Planete) -->
-  <script>
-    const canvas = document.getElementById('space-canvas');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const stars = [];
-    for (let i = 0; i < 180; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.5 + 0.5,
-        alpha: Math.random(),
-        speed: Math.random() * 0.02 + 0.005
-      });
-    }
-
-    const planets = [
-      { x: canvas.width * 0.15, y: canvas.height * 0.2, radius: 28, color: '#222222', strokeColor: '#ffffff', glow: '#ffffff', angle: 0, speed: 0.002, orbitRadius: 15 },
-      { x: canvas.width * 0.85, y: canvas.height * 0.75, radius: 38, color: '#111111', strokeColor: '#cccccc', glow: '#aaaaaa', ring: true, angle: Math.PI, speed: 0.0015, orbitRadius: 20 }
-    ];
-
-    function drawSpace() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      stars.forEach(star => {
-        star.alpha += star.speed;
-        if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(star.alpha)})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      planets.forEach(p => {
-        p.angle += p.speed;
-        const currentX = p.x + Math.cos(p.angle) * p.orbitRadius;
-        const currentY = p.y + Math.sin(p.angle) * p.orbitRadius;
-
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.strokeStyle = p.strokeColor;
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = p.glow;
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        if (p.ring) {
-          ctx.beginPath();
-          ctx.ellipse(currentX, currentY, p.radius * 1.9, p.radius * 0.45, Math.PI / 6, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
-        }
-      });
-
-      requestAnimationFrame(drawSpace);
-    }
-    drawSpace();
-  </script>
-
-  <!-- Animație de Particule (Stele) din Nume -->
+  <!-- Animație Stele din Nume -->
   <script>
     const pCanvas = document.getElementById('particles-canvas');
     const pCtx = pCanvas.getContext('2d');
@@ -567,13 +494,13 @@
     animateParticles();
   </script>
 
-  <!-- YouTube IFrame API & Logica de sincronizare -->
+  <!-- YouTube Audio API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
     let isPlaying = false;
     let updateTimer;
-    const startTime = 43; // Secunda de start reală (0:43)
+    const startTime = 43;
 
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
