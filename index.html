@@ -25,20 +25,20 @@
       position: relative;
     }
 
-    /* Fundal cu poza ta locală background.jpeg */
+    /* Fundalul cu dolari în stil alb-negru blurat discret */
     .bg-overlay {
       position: absolute;
       top: -5%;
       left: -5%;
       width: 110%;
       height: 110%;
-      background: url('background.jpeg') no-repeat center center;
+      background: url('bg.jpg') no-repeat center center;
       background-size: cover;
-      filter: blur(4px) brightness(0.4);
+      filter: grayscale(100%) blur(4px) brightness(0.35);
       z-index: 1;
     }
 
-    /* Canvas pentru efectul de particule de la nume */
+    /* Canvas pentru particule stele din nume */
     #particles-canvas {
       position: absolute;
       top: 0;
@@ -49,7 +49,7 @@
       pointer-events: none;
     }
 
-    /* Overlay întâmpinare pentru pornire audio */
+    /* Ecran de întâmpinare pentru pornire audio */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -100,20 +100,20 @@
       box-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
     }
 
-    /* Container principal */
+    /* Containerul principal pe mijloc */
     .main-container {
       position: relative;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 25px;
+      gap: 35px;
       padding: 20px;
-      max-width: 380px;
-      width: 90%;
+      width: 100%;
+      max-width: 460px;
     }
 
-    /* Header Profil */
+    /* Header Profil (Fără pătrat) */
     .profile-section {
       display: flex;
       flex-direction: column;
@@ -123,10 +123,10 @@
     }
 
     .username {
-      font-size: 2.3rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      letter-spacing: 1px;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.4);
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 0 50px rgba(255, 255, 255, 0.4);
       position: relative;
       display: inline-block;
     }
@@ -137,8 +137,8 @@
     }
 
     .social-btn {
-      width: 45px;
-      height: 45px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -146,31 +146,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       text-decoration: none;
       transition: all 0.3s ease;
       backdrop-filter: blur(8px);
     }
 
     .social-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.25);
       transform: translateY(-4px) scale(1.05);
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card Player Audio */
+    /* Card Player Nou (Stil orizontal lat ca în imaginea ta) */
     .player-card {
       width: 100%;
-      background: rgba(12, 12, 12, 0.85);
+      background: rgba(12, 12, 14, 0.78);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 24px;
+      border-radius: 16px;
+      padding: 22px 26px;
       backdrop-filter: blur(16px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 18px;
+      gap: 16px;
     }
 
     .track-info {
@@ -179,29 +178,79 @@
     }
 
     .track-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 4px;
+      letter-spacing: 1px;
     }
 
-    .track-artist {
-      font-size: 0.85rem;
+    /* Bara de progres unificată */
+    .progress-box {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .seek-slider {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .seek-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    }
+
+    .time-indicators {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
       color: #aaaaaa;
-      font-weight: 500;
+      font-family: monospace;
     }
 
-    /* Controale Play */
-    .controls {
+    /* Bara de controale jos (Shuffle, Prev, Play/Pause, Next, Volum, Mute, Repeat) */
+    .media-controls {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
+      padding-top: 4px;
     }
 
-    .play-btn {
-      width: 55px;
-      height: 55px;
+    .control-sub-btn {
+      background: none;
+      border: none;
+      color: #aaaaaa;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .control-sub-btn:hover {
+      color: #ffffff;
+    }
+
+    .center-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .play-btn-main {
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
       background: #ffffff;
       color: #000000;
@@ -210,62 +259,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     }
 
-    .play-btn:hover {
+    .play-btn-main:hover {
       transform: scale(1.08);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
-    /* Bară progres & volum */
-    .progress-container, .volume-container {
-      width: 100%;
+    /* Control Volum în dreapta jos */
+    .volume-box-inline {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 8px;
     }
 
-    .volume-container {
-      flex-direction: row;
-      align-items: center;
-      gap: 12px;
-      margin-top: 5px;
-    }
-
-    .volume-icon {
-      font-size: 0.9rem;
-      color: #aaaaaa;
-      width: 15px;
-    }
-
-    .time-display {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: #a0a0a0;
-      font-family: monospace;
-    }
-
-    .seek-slider, .volume-slider {
-      width: 100%;
-      height: 5px;
+    .volume-slider {
+      width: 75px;
+      height: 4px;
       -webkit-appearance: none;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
+      border-radius: 3px;
       outline: none;
       cursor: pointer;
     }
 
-    .seek-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
+    .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
 
     #hidden-yt-container {
@@ -280,7 +307,7 @@
 </head>
 <body>
 
-  <!-- Overlay Start -->
+  <!-- Ecran de întâmpinare -->
   <div id="welcome-overlay">
     <div class="welcome-box">
       <h1 class="welcome-title">@snuxjx0</h1>
@@ -291,7 +318,7 @@
   <!-- Fundal Imagine -->
   <div class="bg-overlay"></div>
 
-  <!-- Canvas Particule -->
+  <!-- Canvas Particule Stele din Nume -->
   <canvas id="particles-canvas"></canvas>
 
   <!-- Player YT Ascuns -->
@@ -301,7 +328,7 @@
 
   <div class="main-container">
     
-    <!-- Profil Header -->
+    <!-- Profil Header (Fără pătrat) -->
     <div class="profile-section">
       <h1 class="username" id="username-el">@snuxjx0</h1>
       <div class="social-links">
@@ -317,36 +344,43 @@
       </div>
     </div>
 
-    <!-- Card Audio Player -->
+    <!-- Player Card Nou Stilizat -->
     <div class="player-card">
       <div class="track-info">
-        <div class="track-title">NU YORK</div>
-        <div class="track-artist">JET$KI</div>
+        <div class="track-title">JET$KI - NU YORK</div>
       </div>
 
-      <div class="controls">
-        <button class="play-btn" id="play-btn">
-          <i class="fas fa-play" id="play-icon" style="margin-left: 3px;"></i>
-        </button>
-      </div>
-
-      <div class="progress-container">
+      <!-- Bara de progres + Timp -->
+      <div class="progress-box">
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
-        <div class="time-display">
+        <div class="time-indicators">
           <span id="current-time">0:00</span>
           <span id="duration">2:57</span>
         </div>
       </div>
 
-      <div class="volume-container">
-        <i class="fas fa-volume-high volume-icon" id="volume-icon"></i>
-        <input type="range" class="volume-slider" id="volume-slider" value="100" min="0" max="100">
+      <!-- Controale Media pe rând -->
+      <div class="media-controls">
+        <button class="control-sub-btn" title="Shuffle"><i class="fas fa-shuffle"></i></button>
+        
+        <div class="center-group">
+          <button class="control-sub-btn" title="Previous"><i class="fas fa-backward-step"></i></button>
+          <button class="play-btn-main" id="play-btn">
+            <i class="fas fa-play" id="play-icon" style="margin-left: 2px;"></i>
+          </button>
+          <button class="control-sub-btn" title="Next"><i class="fas fa-forward-step"></i></button>
+        </div>
+
+        <div class="volume-box-inline">
+          <button class="control-sub-btn" id="mute-btn"><i class="fas fa-volume-high" id="volume-icon"></i></button>
+          <input type="range" class="volume-slider" id="volume-slider" value="100" min="0" max="100">
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Script Particule de la Nume -->
+  <!-- Animație Particule Stele -->
   <script>
     const pCanvas = document.getElementById('particles-canvas');
     const pCtx = pCanvas.getContext('2d');
@@ -430,19 +464,20 @@
     animateParticles();
   </script>
 
-  <!-- Script YouTube API -->
+  <!-- YouTube IFrame API & Logică 0:43 -> 0:00 -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
     let isPlaying = false;
     let updateTimer;
-    const startTime = 43;
+    const startTime = 43; // Secunda de start reală în fundal
 
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const seekSlider = document.getElementById('seek-slider');
     const volumeSlider = document.getElementById('volume-slider');
     const volumeIcon = document.getElementById('volume-icon');
+    const muteBtn = document.getElementById('mute-btn');
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
     const welcomeOverlay = document.getElementById('welcome-overlay');
@@ -487,7 +522,7 @@
       } else {
         isPlaying = false;
         playIcon.className = 'fas fa-play';
-        playIcon.style.marginLeft = '3px';
+        playIcon.style.marginLeft = '2px';
         stopTimer();
       }
     }
@@ -519,14 +554,29 @@
       const vol = volumeSlider.value;
       player.setVolume(vol);
 
-      if (vol == 0) {
-        volumeIcon.className = 'fas fa-volume-xmark volume-icon';
-      } else if (vol < 50) {
-        volumeIcon.className = 'fas fa-volume-low volume-icon';
+      updateVolumeIcon(vol);
+    });
+
+    muteBtn.addEventListener('click', () => {
+      if (!player) return;
+      if (player.isMuted()) {
+        player.unMute();
+        updateVolumeIcon(volumeSlider.value);
       } else {
-        volumeIcon.className = 'fas fa-volume-high volume-icon';
+        player.mute();
+        volumeIcon.className = 'fas fa-volume-xmark';
       }
     });
+
+    function updateVolumeIcon(vol) {
+      if (vol == 0) {
+        volumeIcon.className = 'fas fa-volume-xmark';
+      } else if (vol < 50) {
+        volumeIcon.className = 'fas fa-volume-low';
+      } else {
+        volumeIcon.className = 'fas fa-volume-high';
+      }
+    }
 
     function startTimer() {
       stopTimer();
