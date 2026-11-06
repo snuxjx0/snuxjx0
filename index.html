@@ -301,8 +301,8 @@
     <!-- Card Player Audio -->
     <div class="player-card">
       <div class="track-info">
-        <div class="track-title">Monëy so big</div>
-        <div class="track-artist">Yeat</div>
+        <div class="track-title">NU YORK</div>
+        <div class="track-artist">JET$KI</div>
       </div>
 
       <!-- Buton Start / Stop -->
@@ -317,7 +317,7 @@
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-display">
           <span id="current-time">0:00</span>
-          <span id="duration">2:41</span>
+          <span id="duration">3:40</span>
         </div>
       </div>
 
@@ -400,7 +400,7 @@
     drawSpace();
   </script>
 
-  <!-- YouTube IFrame API & Logica de Autoplay -->
+  <!-- YouTube IFrame API & Logica de Autoplay și Pornire de la 0:43 -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
@@ -418,12 +418,13 @@
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        videoId: 'yGcBisGFFBo',
+        videoId: 'r08vc8i4dEo',
         playerVars: {
           'autoplay': 0,
           'controls': 0,
           'disablekb': 1,
-          'enablejsapi': 1
+          'enablejsapi': 1,
+          'start': 43 // Pornește automat de la secundta 43 (0:43)
         },
         events: {
           'onReady': onPlayerReady,
@@ -442,6 +443,7 @@
           welcomeOverlay.style.display = 'none';
         }, 500);
 
+        player.seekTo(43, true); // Asigură pornirea exact de la 0:43 la click
         player.playVideo();
       });
     }
