@@ -11,6 +11,7 @@
       margin: 0;
       padding: 0;
       user-select: none;
+      cursor: none; /* Ascundem cursorul clasic pentru a folosi punctul luminos */
     }
 
     body {
@@ -23,6 +24,23 @@
       align-items: center;
       overflow: hidden;
       position: relative;
+    }
+
+    /* Cursor personalizat (Punct alb cu aură) */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.8),
+                  0 0 25px 8px rgba(255, 255, 255, 0.4);
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
     }
 
     /* Canvas Spațial (Stele și Planete) */
@@ -210,7 +228,6 @@
       background: rgba(255, 255, 255, 0.2);
       border-radius: 4px;
       outline: none;
-      cursor: pointer;
     }
 
     .seek-slider::-webkit-slider-thumb {
@@ -219,7 +236,6 @@
       height: 14px;
       border-radius: 50%;
       background: #ffffff;
-      cursor: pointer;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
     }
 
@@ -245,7 +261,6 @@
       border: none;
       color: #aaaaaa;
       font-size: 1rem;
-      cursor: pointer;
       transition: color 0.2s ease;
     }
 
@@ -266,7 +281,6 @@
       background: #ffffff;
       color: #000000;
       border: none;
-      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -294,7 +308,6 @@
       background: rgba(255, 255, 255, 0.2);
       border-radius: 3px;
       outline: none;
-      cursor: pointer;
     }
 
     .volume-slider::-webkit-slider-thumb {
@@ -303,7 +316,6 @@
       height: 10px;
       border-radius: 50%;
       background: #ffffff;
-      cursor: pointer;
     }
 
     #hidden-yt-container {
@@ -317,6 +329,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Elementul pentru Cursorul Personalizat -->
+  <div id="custom-cursor"></div>
 
   <!-- Ecran de întâmpinare cu butonul Liquid ENTER -->
   <div id="welcome-overlay">
@@ -388,6 +403,15 @@
     </div>
 
   </div>
+
+  <!-- Script Urmărire Cursor -->
+  <script>
+    const cursor = document.getElementById('custom-cursor');
+    window.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  </script>
 
   <!-- Animație Spațială Alb-Negru (Stele & Planete) -->
   <script>
