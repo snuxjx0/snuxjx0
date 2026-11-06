@@ -317,7 +317,7 @@
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-display">
           <span id="current-time">0:00</span>
-          <span id="duration">3:40</span>
+          <span id="duration">2:57</span>
         </div>
       </div>
 
@@ -400,12 +400,13 @@
     drawSpace();
   </script>
 
-  <!-- YouTube IFrame API & Logica de Autoplay și Pornire de la 0:43 -->
+  <!-- YouTube IFrame API & Logica de afișare vizuală de la 0:00 și audio de la 0:43 -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
     let isPlaying = false;
     let updateTimer;
+    const startTime = 43; // Secunda de la care începe efectiv melodia (0:43)
 
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
@@ -424,7 +425,7 @@
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1,
-          'start': 43 // Pornește automat de la secundta 43 (0:43)
+          'start': startTime
         },
         events: {
           'onReady': onPlayerReady,
@@ -443,7 +444,7 @@
           welcomeOverlay.style.display = 'none';
         }, 500);
 
-        player.seekTo(43, true); // Asigură pornirea exact de la 0:43 la click
+        player.seekTo(startTime, true);
         player.playVideo();
       });
     }
@@ -472,11 +473,12 @@
       }
     });
 
+    // Controlul barei de progres (calculează vizual de la 0 până la finalul piesei minus offset-ul)
     seekSlider.addEventListener('input', () => {
       if (!player || !player.getDuration) return;
-      const duration = player.getDuration();
-      const seekTo = (seekSlider.value / 100) * duration;
-      player.seekTo(seekTo, true);
+      const totalDuration = player.getDuration() - startTime;
+      const seekToTime = startTime + (seekSlider.value / 100) * totalDuration;
+      player.seekTo(seekToTime, true);
     });
 
     volumeSlider.addEventListener('input', () => {
@@ -504,19 +506,24 @@
 
     function updateProgress() {
       if (!player || !player.getCurrentTime) return;
-      const current = player.getCurrentTime();
-      const duration = player.getDuration();
+      const currentRealTime = player.getCurrentTime();
+      const totalDuration = player.getDuration() - startTime;
+      
+      // Timpul vizual scade offset-ul de 43 de secunde astfel încât să înceapă de la 0:00
+      let visualCurrent = currentRealTime - startTime;
+      if (visualCurrent < 0) visualCurrent = 0;
 
-      if (duration > 0) {
-        seekSlider.value = (current / duration) * 100;
-        currentTimeEl.textContent = formatTime(current);
-        durationEl.textContent = formatTime(duration);
+      if (totalDuration > 0) {
+        seekSlider.value = (visualCurrent / totalDuration) * 100;
+        currentTimeEl.textContent = formatTime(visualCurrent);
+        durationEl.textContent = formatTime(totalDuration);
       }
     }
 
     function updateDuration() {
       if (player && player.getDuration) {
-        durationEl.textContent = formatTime(player.getDuration());
+        const totalDuration = player.getDuration() - startTime;
+        durationEl.textContent = formatTime(totalDuration);
       }
     }
 
