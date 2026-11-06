@@ -15,7 +15,7 @@
 
     body {
       min-height: 100vh;
-      background: #000000;
+      background: #050508;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #ffffff;
       display: flex;
@@ -25,82 +25,94 @@
       position: relative;
     }
 
-    /* Fundalul cu dolari în stil alb-negru blurat discret */
-    .bg-overlay {
-      position: absolute;
-      top: -5%;
-      left: -5%;
-      width: 110%;
-      height: 110%;
-      background: url('bg.jpg') no-repeat center center;
-      background-size: cover;
-      filter: grayscale(100%) blur(4px) brightness(0.35);
+    /* Canvas Spațial (Stele + Planete) */
+    #space-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 1;
     }
 
-    /* Canvas pentru particule stele din nume */
+    /* Canvas Particule Nume */
     #particles-canvas {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       z-index: 5;
       pointer-events: none;
     }
 
-    /* Ecran de întâmpinare pentru pornire audio */
+    /* Overlay Ecran de Start */
     #welcome-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.92);
+      background: rgba(0, 0, 0, 0.95);
       z-index: 1000;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 20px;
-      cursor: pointer;
-      transition: opacity 0.5s ease;
-    }
-
-    .welcome-box {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
+      gap: 25px;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     .welcome-title {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 800;
       letter-spacing: 2px;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
-    .welcome-btn {
-      padding: 12px 30px;
-      border-radius: 30px;
-      background: #ffffff;
-      color: #000000;
-      font-weight: 700;
-      font-size: 1rem;
-      border: none;
+    /* Buton ENTER cu efect de apă (Liquid Wave Fill) */
+    .liquid-btn {
+      position: relative;
+      padding: 14px 45px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ffffff;
+      background: transparent;
+      border: 2px solid #ffffff;
+      border-radius: 40px;
       cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
+      transition: color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
-    .welcome-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
+    /* Valul de apă din interiorul butonului */
+    .liquid-btn::before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: -20%;
+      width: 140%;
+      height: 200%;
+      background: #ffffff;
+      border-radius: 40%;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: -1;
     }
 
-    /* Containerul principal pe mijloc */
+    .liquid-btn:hover {
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.8);
+    }
+
+    .liquid-btn:hover::before {
+      top: -40%;
+      transform: rotate(180deg);
+    }
+
+    /* Container Principal Profil + Player */
     .main-container {
       position: relative;
       z-index: 10;
@@ -113,7 +125,7 @@
       max-width: 460px;
     }
 
-    /* Header Profil (Fără pătrat) */
+    /* Header Profil */
     .profile-section {
       display: flex;
       flex-direction: column;
@@ -123,7 +135,7 @@
     }
 
     .username {
-      font-size: 2.4rem;
+      font-size: 2.5rem;
       font-weight: 800;
       letter-spacing: 1.5px;
       text-shadow: 0 0 25px rgba(255, 255, 255, 0.9), 0 0 50px rgba(255, 255, 255, 0.4);
@@ -158,14 +170,14 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    /* Card Player Nou (Stil orizontal lat ca în imaginea ta) */
+    /* Card Player Audio Stilizat */
     .player-card {
       width: 100%;
-      background: rgba(12, 12, 14, 0.78);
+      background: rgba(12, 12, 14, 0.82);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 22px 26px;
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
       display: flex;
       flex-direction: column;
@@ -184,7 +196,6 @@
       letter-spacing: 1px;
     }
 
-    /* Bara de progres unificată */
     .progress-box {
       width: 100%;
       display: flex;
@@ -220,7 +231,6 @@
       font-family: monospace;
     }
 
-    /* Bara de controale jos (Shuffle, Prev, Play/Pause, Next, Volum, Mute, Repeat) */
     .media-controls {
       display: flex;
       align-items: center;
@@ -269,7 +279,6 @@
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
-    /* Control Volum în dreapta jos */
     .volume-box-inline {
       display: flex;
       align-items: center;
@@ -307,16 +316,14 @@
 </head>
 <body>
 
-  <!-- Ecran de întâmpinare -->
+  <!-- Ecran de întâmpinare cu Butonul Liquid ENTER -->
   <div id="welcome-overlay">
-    <div class="welcome-box">
-      <h1 class="welcome-title">@snuxjx0</h1>
-      <button class="welcome-btn">Click pentru a intra</button>
-    </div>
+    <h1 class="welcome-title">@snuxjx0</h1>
+    <button class="liquid-btn" id="enter-btn">ENTER</button>
   </div>
 
-  <!-- Fundal Imagine -->
-  <div class="bg-overlay"></div>
+  <!-- Canvas Spațial (Stele și Planete) -->
+  <canvas id="space-canvas"></canvas>
 
   <!-- Canvas Particule Stele din Nume -->
   <canvas id="particles-canvas"></canvas>
@@ -328,7 +335,7 @@
 
   <div class="main-container">
     
-    <!-- Profil Header (Fără pătrat) -->
+    <!-- Profil Header -->
     <div class="profile-section">
       <h1 class="username" id="username-el">@snuxjx0</h1>
       <div class="social-links">
@@ -344,13 +351,12 @@
       </div>
     </div>
 
-    <!-- Player Card Nou Stilizat -->
+    <!-- Player Card -->
     <div class="player-card">
       <div class="track-info">
         <div class="track-title">JET$KI - NU YORK</div>
       </div>
 
-      <!-- Bara de progres + Timp -->
       <div class="progress-box">
         <input type="range" class="seek-slider" id="seek-slider" value="0" min="0" max="100" step="0.1">
         <div class="time-indicators">
@@ -359,7 +365,6 @@
         </div>
       </div>
 
-      <!-- Controale Media pe rând -->
       <div class="media-controls">
         <button class="control-sub-btn" title="Shuffle"><i class="fas fa-shuffle"></i></button>
         
@@ -380,7 +385,123 @@
 
   </div>
 
-  <!-- Animație Particule Stele -->
+  <!-- Script Animație Spațială: Stele + Planete Roto-Dinamice -->
+  <script>
+    const spaceCanvas = document.getElementById('space-canvas');
+    const sCtx = spaceCanvas.getContext('2d');
+
+    function resizeSpaceCanvas() {
+      spaceCanvas.width = window.innerWidth;
+      spaceCanvas.height = window.innerHeight;
+    }
+    resizeSpaceCanvas();
+    window.addEventListener('resize', resizeSpaceCanvas);
+
+    const bgStars = [];
+    for (let i = 0; i < 200; i++) {
+      bgStars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 1.5 + 0.5,
+        alpha: Math.random(),
+        speed: Math.random() * 0.012 + 0.004
+      });
+    }
+
+    const planets = [
+      {
+        get x() { return spaceCanvas.width * 0.18; },
+        get y() { return spaceCanvas.height * 0.22; },
+        radius: 38,
+        color: '#080808',
+        strokeColor: '#ffffff',
+        glowColor: 'rgba(255, 255, 255, 0.5)',
+        ring: true,
+        ringRadiusX: 70,
+        ringRadiusY: 18,
+        ringAngle: -Math.PI / 6,
+        angle: 0,
+        speed: 0.0018,
+        orbitRadius: 22
+      },
+      {
+        get x() { return spaceCanvas.width * 0.82; },
+        get y() { return spaceCanvas.height * 0.78; },
+        radius: 52,
+        color: '#0c0c0c',
+        strokeColor: '#dddddd',
+        glowColor: 'rgba(220, 220, 220, 0.35)',
+        ring: true,
+        doubleRing: true,
+        ringRadiusX: 105,
+        ringRadiusY: 24,
+        ringAngle: Math.PI / 5,
+        angle: Math.PI,
+        speed: 0.001,
+        orbitRadius: 28
+      }
+    ];
+
+    function drawSpace() {
+      sCtx.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height);
+
+      // Stele Fundal
+      bgStars.forEach(s => {
+        s.alpha += s.speed;
+        if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
+        sCtx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+        sCtx.beginPath();
+        sCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        sCtx.fill();
+      });
+
+      // Planete
+      planets.forEach(p => {
+        p.angle += p.speed;
+        const cx = p.x + Math.cos(p.angle) * p.orbitRadius;
+        const cy = p.y + Math.sin(p.angle) * p.orbitRadius;
+
+        sCtx.save();
+        sCtx.beginPath();
+        sCtx.arc(cx, cy, p.radius, 0, Math.PI * 2);
+        sCtx.fillStyle = p.color;
+        sCtx.strokeStyle = p.strokeColor;
+        sCtx.lineWidth = 2;
+        sCtx.shadowColor = p.glowColor;
+        sCtx.shadowBlur = 18;
+        sCtx.fill();
+        sCtx.stroke();
+        sCtx.restore();
+
+        if (p.ring) {
+          sCtx.save();
+          sCtx.translate(cx, cy);
+          sCtx.rotate(p.ringAngle);
+
+          sCtx.beginPath();
+          sCtx.ellipse(0, 0, p.ringRadiusX, p.ringRadiusY, 0, 0, Math.PI * 2);
+          sCtx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+          sCtx.lineWidth = 2;
+          sCtx.stroke();
+
+          if (p.doubleRing) {
+            sCtx.beginPath();
+            sCtx.ellipse(0, 0, p.ringRadiusX + 12, p.ringRadiusY + 4, 0, 0, Math.PI * 2);
+            sCtx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            sCtx.lineWidth = 1;
+            sCtx.stroke();
+          }
+
+          sCtx.restore();
+        }
+      });
+
+      requestAnimationFrame(drawSpace);
+    }
+    drawSpace();
+  </script>
+
+  <!-- Script Particule Nume (Stele) -->
   <script>
     const pCanvas = document.getElementById('particles-canvas');
     const pCtx = pCanvas.getContext('2d');
@@ -464,13 +585,13 @@
     animateParticles();
   </script>
 
-  <!-- YouTube IFrame API & Logică 0:43 -> 0:00 -->
+  <!-- YouTube API & Logică Audio -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     let player;
     let isPlaying = false;
     let updateTimer;
-    const startTime = 43; // Secunda de start reală în fundal
+    const startTime = 43;
 
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
@@ -481,6 +602,7 @@
     const currentTimeEl = document.getElementById('current-time');
     const durationEl = document.getElementById('duration');
     const welcomeOverlay = document.getElementById('welcome-overlay');
+    const enterBtn = document.getElementById('enter-btn');
 
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
@@ -502,11 +624,10 @@
       player.setVolume(100);
       updateDurationDisplay();
 
-      welcomeOverlay.addEventListener('click', () => {
+      // Apăsare Buton ENTER -> Intrarea directă pe site și pornire muzică
+      enterBtn.addEventListener('click', () => {
         welcomeOverlay.style.opacity = '0';
-        setTimeout(() => {
-          welcomeOverlay.style.display = 'none';
-        }, 500);
+        welcomeOverlay.style.visibility = 'hidden';
 
         player.seekTo(startTime, true);
         player.playVideo();
@@ -553,7 +674,6 @@
       if (!player || !player.setVolume) return;
       const vol = volumeSlider.value;
       player.setVolume(vol);
-
       updateVolumeIcon(vol);
     });
 
