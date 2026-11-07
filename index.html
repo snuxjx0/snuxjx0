@@ -55,13 +55,24 @@
       transform: translate(-50%, -50%);
     }
 
-    /* Canvas Particule Stele din Nume */
-    #particles-canvas {
-      position: absolute;
+    /* Canvas pentru efectul de desenare pe ecran */
+    #drawing-canvas {
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Canvas Particule Stele din Nume */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 5;
       pointer-events: none;
     }
@@ -332,7 +343,10 @@
   <!-- Cursor Personalizat -->
   <div id="custom-cursor"></div>
 
-  <!-- Ecran de întâmpinare cu butonul Liquid ENTER -->
+  <!-- Canvas Desenare Interactivă cu Aură -->
+  <canvas id="drawing-canvas"></canvas>
+
+  <!-- Ecran de întâmpinare -->
   <div id="welcome-overlay">
     <h1 class="welcome-title">@snuxjx0</h1>
     <button class="liquid-btn" id="enter-btn">ENTER</button>
@@ -408,6 +422,85 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
+  </script>
+
+  <!-- Script Desenare pe Ecran (Linii Alb-Lucioase cu Aură care dispar) -->
+  <script>
+    const dCanvas = document.getElementById('drawing-canvas');
+    const dCtx = dCanvas.getContext('2d');
+
+    function resizeDCanvas() {
+      dCanvas.width = window.innerWidth;
+      dCanvas.height = window.innerHeight;
+    }
+    resizeDCanvas();
+    window.addEventListener('resize', resizeDCanvas);
+
+    let isMouseDown = false;
+    let strokePoints = [];
+
+    window.addEventListener('mousedown', (e) => {
+      isMouseDown = true;
+      addPoint(e.clientX, e.clientY, true);
+    });
+
+    window.addEventListener('mouseup', () => {
+      isMouseDown = false;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isMouseDown) {
+        addPoint(e.clientX, e.clientY, false);
+      }
+    });
+
+    function addPoint(x, y, isNewStroke) {
+      strokePoints.push({
+        x: x,
+        y: y,
+        life: 1.0,
+        isNew: isNewStroke
+      });
+    }
+
+    function renderDrawings() {
+      dCtx.clearRect(0, 0, dCanvas.width, dCanvas.height);
+
+      for (let i = 0; i < strokePoints.length; i++) {
+        strokePoints[i].life -= 0.012; // Se estompează în ~1.5 - 2 secunde
+      }
+      strokePoints = strokePoints.filter(p => p.life > 0);
+
+      if (strokePoints.length > 1) {
+        for (let i = 1; i < strokePoints.length; i++) {
+          const p1 = strokePoints[i - 1];
+          const p2 = strokePoints[i];
+
+          if (p2.isNew) continue;
+
+          const currentAlpha = Math.min(p1.life, p2.life);
+
+          dCtx.save();
+          dCtx.beginPath();
+          dCtx.moveTo(p1.x, p1.y);
+          dCtx.lineTo(p2.x, p2.y);
+          dCtx.lineCap = 'round';
+          dCtx.lineJoin = 'round';
+          dCtx.lineWidth = 4;
+          dCtx.strokeStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+          
+          // Aura albă strălucitoare (Glow)
+          dCtx.shadowColor = `rgba(255, 255, 255, ${currentAlpha * 0.9})`;
+          dCtx.shadowBlur = 14;
+
+          dCtx.stroke();
+          dCtx.restore();
+        }
+      }
+
+      requestAnimationFrame(renderDrawings);
+    }
+    renderDrawings();
   </script>
 
   <!-- Animație Stele din Nume -->
