@@ -26,7 +26,7 @@
       position: relative;
     }
 
-    /* Fundalul tău cu blur fin și ton dark */
+    /* Fundalul cu blur fin */
     .bg-overlay {
       position: absolute;
       top: -5%;
@@ -77,7 +77,7 @@
       pointer-events: none;
     }
 
-    /* Ecran de întâmpinare cu Liquid ENTER */
+    /* Ecran de întâmpinare cu butonul Liquid ENTER */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -101,6 +101,7 @@
       text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
     }
 
+    /* Buton ENTER cu efect de apă (Liquid Fill) */
     .liquid-btn {
       position: relative;
       padding: 14px 45px;
@@ -154,7 +155,7 @@
       max-width: 420px;
     }
 
-    /* Profil Stilizat ca în poză */
+    /* Profil Stilizat */
     .profile-section {
       display: flex;
       flex-direction: column;
@@ -163,7 +164,6 @@
       position: relative;
     }
 
-    /* Iconiță/Badge mic deasupra avatarului */
     .profile-badge {
       font-size: 1.3rem;
       color: #ffffff;
@@ -196,7 +196,7 @@
       margin-top: -5px;
     }
 
-    /* Mini Card Status (Spotify / Activitate) */
+    /* Mini Card Status */
     .status-card {
       width: 100%;
       background: rgba(18, 18, 22, 0.75);
@@ -235,7 +235,7 @@
       color: #999999;
     }
 
-    /* Link-uri Sociale în rând (stil minimalist) */
+    /* Link-uri Sociale în rând (Fără Discord, cu Instagram adăugat) */
     .social-links {
       display: flex;
       gap: 18px;
@@ -393,10 +393,10 @@
   <!-- Cursor Personalizat -->
   <div id="custom-cursor"></div>
 
-  <!-- Canvas Desenare -->
+  <!-- Canvas Desenare Interactivă cu Aură -->
   <canvas id="drawing-canvas"></canvas>
 
-  <!-- Ecran de întâmpinare -->
+  <!-- Ecran de întâmpinare cu butonul Liquid ENTER -->
   <div id="welcome-overlay">
     <h1 class="welcome-title">@snuxjx0</h1>
     <button class="liquid-btn" id="enter-btn">ENTER</button>
@@ -405,7 +405,7 @@
   <!-- Fundal Imagine -->
   <div class="bg-overlay"></div>
 
-  <!-- Canvas Particule Nume -->
+  <!-- Canvas Particule Stele din Nume -->
   <canvas id="particles-canvas"></canvas>
 
   <!-- Player YT Ascuns -->
@@ -415,7 +415,7 @@
 
   <div class="main-container">
     
-    <!-- Profil Centralizat (Avatar GIF + Nume + Bio + Status + Link-uri) -->
+    <!-- Profil Centralizat -->
     <div class="profile-section">
       <div class="profile-badge"><i class="fas fa-crosshairs"></i></div>
       <div class="profile-avatar"></div>
@@ -431,12 +431,10 @@
         </div>
       </div>
 
-      <!-- Link-uri Sociale -->
+      <!-- Link-uri Sociale (Instagram inclus, Fără Discord) -->
       <div class="social-links">
-        <a href="https://discord.com" target="_blank" class="social-btn" title="Discord"><i class="fab fa-discord"></i></a>
+        <a href="https://www.instagram.com/snuxjx0/" target="_blank" class="social-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://www.youtube.com/@snuxjx0" target="_blank" class="social-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="https://open.spotify.com" target="_blank" class="social-btn" title="Spotify"><i class="fab fa-spotify"></i></a>
-        <a href="https://www.instagram.com" target="_blank" class="social-btn" title="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://steamcommunity.com/profiles/76561199860743512/" target="_blank" class="social-btn" title="Steam"><i class="fab fa-steam"></i></a>
         <a href="https://www.tiktok.com/@snuxjx0" target="_blank" class="social-btn" title="TikTok"><i class="fab fa-tiktok"></i></a>
       </div>
@@ -483,7 +481,7 @@
     });
   </script>
 
-  <!-- Script Desenare Interactivă -->
+  <!-- Script Desenare pe Ecran (Linii Alb-Lucioase cu Aură care dispar) -->
   <script>
     const dCanvas = document.getElementById('drawing-canvas');
     const dCtx = dCanvas.getContext('2d');
